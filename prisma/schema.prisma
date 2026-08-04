@@ -16,5 +16,23 @@ model User {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
+  daySchedules DaySchedule[]
+
   @@map("users")
+}
+
+model DaySchedule {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime @db.Date
+  workStart   String   @map("work_start")
+  workEnd     String   @map("work_end")
+  lunchStart  String?  @map("lunch_start")
+  lunchEnd    String?  @map("lunch_end")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, date])
+  @@map("day_schedules")
 }
