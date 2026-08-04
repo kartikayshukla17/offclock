@@ -2,6 +2,7 @@
 
 import { DashboardShell } from "@/components/dashboard-shell";
 import { useAuth } from "@/components/auth-provider";
+import { DayScheduleForm } from "@/components/day-schedule-form";
 
 export default function DashboardPage() {
   const { appUser } = useAuth();
@@ -14,16 +15,12 @@ export default function DashboardPage() {
             Good {getGreeting()}, {appUser?.displayName?.split(" ")[0] ?? "there"}
           </h1>
           <p className="mt-2 text-stone-600">
-            Day 1 dashboard. Tomorrow we add today&apos;s work hours and lunch
-            window.
+            Set today&apos;s work hours below. Status toggles land tomorrow.
           </p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <PlaceholderCard
-            title="Today's schedule"
-            detail="Work start / end + lunch — Day 2"
-          />
+          <DayScheduleForm />
           <PlaceholderCard
             title="Your status"
             detail="Available / Focused / In meeting — Day 3"
