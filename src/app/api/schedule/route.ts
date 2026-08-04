@@ -4,6 +4,8 @@ import { isFirebaseAdminConfigured } from "@/lib/firebase/admin";
 import { prisma } from "@/lib/prisma";
 import { getLocalDateString, validateScheduleTimes } from "@/lib/schedule";
 
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
 export async function GET(request: NextRequest) {
   if (!isFirebaseAdminConfigured()) {
     return NextResponse.json(
@@ -24,7 +26,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  const date = request.nextUrl.searchParams.get("date") ?? getLocalDateString();
+  const dateParam = request.nextUrl.searchParams.get("date");
+  if (dateParam !== null && !DATE_RE.test(dateParam)) {
+    return NextResponse.json(
+      { error: "date must be in YYYY-MM-DD format." },
+      { status: 400 },
+    );
+  }
+  const date = dateParam ?? getLocalDateString();
 
   const schedule = await prisma.daySchedule.findUnique({
     where: { userId_date: { userId: user.id, date: new Date(date) } },
@@ -64,6 +73,13 @@ export async function PUT(request: NextRequest) {
   if (typeof body.workStart !== "string" || typeof body.workEnd !== "string") {
     return NextResponse.json(
       { error: "workStart and workEnd are required." },
+      { status: 400 },
+    );
+  }
+
+  if (body.date !== undefined && (typeof body.date !== "string" || !DATE_RE.test(body.date))) {
+    return NextResponse.json(
+      { error: "date must be in YYYY-MM-DD format." },
       { status: 400 },
     );
   }
