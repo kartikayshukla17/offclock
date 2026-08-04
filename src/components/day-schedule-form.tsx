@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
+import { getLocalDateString, validateScheduleTimes } from "@/lib/schedule";
 
 type Schedule = {
   workStart: string;
@@ -30,9 +31,12 @@ export function DayScheduleForm() {
       try {
         const token = await getIdToken();
         if (!token) return;
-        const res = await fetch("/api/schedule", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `/api/schedule?date=${getLocalDateString()}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
         if (cancelled) return;
         if (res.ok) {
           const data = (await res.json()) as { schedule: Schedule | null };
@@ -45,6 +49,8 @@ export function DayScheduleForm() {
               setLunchEnd(data.schedule.lunchEnd);
             }
           }
+        } else {
+          setError("Couldn't load your schedule — try reloading.");
         }
       } catch {
         if (!cancelled) {
@@ -67,23 +73,15 @@ export function DayScheduleForm() {
     setError(null);
     setSaved(false);
 
-    if (!workStart || !workEnd) {
-      setError("Set both a work start and end time.");
+    const validationError = validateScheduleTimes({
+      workStart,
+      workEnd,
+      lunchStart: hasLunch ? lunchStart : undefined,
+      lunchEnd: hasLunch ? lunchEnd : undefined,
+    });
+    if (validationError) {
+      setError(validationError);
       return;
-    }
-    if (workEnd <= workStart) {
-      setError("Work end must be after work start.");
-      return;
-    }
-    if (hasLunch) {
-      if (!lunchStart || !lunchEnd) {
-        setError("Set both a lunch start and end time, or turn lunch off.");
-        return;
-      }
-      if (lunchStart < workStart || lunchEnd > workEnd || lunchStart >= lunchEnd) {
-        setError("Lunch window must fall within work hours.");
-        return;
-      }
     }
 
     setSaving(true);
@@ -100,6 +98,7 @@ export function DayScheduleForm() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          date: getLocalDateString(),
           workStart,
           workEnd,
           lunchStart: hasLunch ? lunchStart : undefined,
