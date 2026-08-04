@@ -73,6 +73,11 @@ export function DayScheduleForm() {
     setError(null);
     setSaved(false);
 
+    if (hasLunch && !lunchStart && !lunchEnd) {
+      setError("Set both a lunch start and end time, or turn lunch off.");
+      return;
+    }
+
     const validationError = validateScheduleTimes({
       workStart,
       workEnd,
