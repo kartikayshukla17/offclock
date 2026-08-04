@@ -34,9 +34,9 @@
 - [ ] **Post:** Announce problem (see calendar)
 
 ### Day 2 — Daily schedule
-- [ ] Set work start / end for today
-- [ ] Optional lunch window (start/end)
-- [ ] Save to DB (Prisma: `User`, `DaySchedule`)
+- [x] Set work start / end for today
+- [x] Optional lunch window (start/end)
+- [x] Save to DB (Prisma: `User`, `DaySchedule`)
 - [ ] **Post:** Pain post — family interruptions
 
 ### Day 3 — Status toggle
