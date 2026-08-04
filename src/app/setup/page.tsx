@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { useAuth } from "@/components/auth-provider";
@@ -13,12 +13,13 @@ export default function SetupPage() {
   const [slug, setSlug] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [syncedAppUser, setSyncedAppUser] = useState(appUser);
 
-  useEffect(() => {
-    if (!appUser) return;
-    setDisplayName(appUser.displayName ?? "");
-    setSlug(appUser.slug ?? "");
-  }, [appUser]);
+  if (appUser !== syncedAppUser) {
+    setSyncedAppUser(appUser);
+    setDisplayName(appUser?.displayName ?? "");
+    setSlug(appUser?.slug ?? "");
+  }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();

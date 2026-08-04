@@ -88,9 +88,9 @@ async function fetchProfile(token: string): Promise<AppUser> {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
   const [appUser, setAppUser] = useState<AppUser | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [syncError, setSyncError] = useState<string | null>(null);
   const configured = isFirebaseConfigured();
+  const [loading, setLoading] = useState(configured);
+  const [syncError, setSyncError] = useState<string | null>(null);
 
   const refreshProfile = useCallback(async () => {
     if (!configured) return;
@@ -104,7 +104,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!configured) {
-      setLoading(false);
       return;
     }
 
