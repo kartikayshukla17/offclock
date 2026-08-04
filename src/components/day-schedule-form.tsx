@@ -27,25 +27,34 @@ export function DayScheduleForm() {
     let cancelled = false;
 
     async function load() {
-      const token = await getIdToken();
-      if (!token) return;
-      const res = await fetch("/api/schedule", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (cancelled) return;
-      if (res.ok) {
-        const data = (await res.json()) as { schedule: Schedule | null };
-        if (data.schedule) {
-          setWorkStart(data.schedule.workStart);
-          setWorkEnd(data.schedule.workEnd);
-          if (data.schedule.lunchStart && data.schedule.lunchEnd) {
-            setHasLunch(true);
-            setLunchStart(data.schedule.lunchStart);
-            setLunchEnd(data.schedule.lunchEnd);
+      try {
+        const token = await getIdToken();
+        if (!token) return;
+        const res = await fetch("/api/schedule", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (cancelled) return;
+        if (res.ok) {
+          const data = (await res.json()) as { schedule: Schedule | null };
+          if (data.schedule) {
+            setWorkStart(data.schedule.workStart);
+            setWorkEnd(data.schedule.workEnd);
+            if (data.schedule.lunchStart && data.schedule.lunchEnd) {
+              setHasLunch(true);
+              setLunchStart(data.schedule.lunchStart);
+              setLunchEnd(data.schedule.lunchEnd);
+            }
           }
         }
+      } catch {
+        if (!cancelled) {
+          setError("Couldn't load your schedule — try reloading.");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
-      setLoading(false);
     }
 
     load();
@@ -103,6 +112,8 @@ export function DayScheduleForm() {
         return;
       }
       setSaved(true);
+    } catch {
+      setError("Couldn't save — check your connection and try again.");
     } finally {
       setSaving(false);
     }
