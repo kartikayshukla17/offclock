@@ -4,7 +4,7 @@ import { isFirebaseAdminConfigured } from "@/lib/firebase/admin";
 import { prisma } from "@/lib/prisma";
 import { getLocalDateString, validateScheduleTimes } from "@/lib/schedule";
 
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const DATE_RE = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
 export async function GET(request: NextRequest) {
   if (!isFirebaseAdminConfigured()) {
