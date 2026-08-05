@@ -5,7 +5,7 @@ import { useAuth } from "@/components/auth-provider";
 import {
   SCHEDULE_STATUSES,
   getLocalDateString,
-  isValidTime,
+  validateStatusUpdate,
   type Schedule,
   type ScheduleStatusValue,
 } from "@/lib/schedule";
@@ -55,12 +55,14 @@ export function StatusPanel({
       setError("Pick a status first.");
       return;
     }
-    if (statusUntil && !isValidTime(statusUntil)) {
-      setError("Until time must be a valid time (HH:mm).");
-      return;
-    }
-    if (statusMessage.trim().length > 80) {
-      setError("Message must be 80 characters or less.");
+
+    const validationError = validateStatusUpdate({
+      status: selectedStatus,
+      statusUntil: statusUntil || undefined,
+      statusMessage: statusMessage.trim() || undefined,
+    });
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
