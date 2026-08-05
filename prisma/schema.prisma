@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ScheduleStatus {
+  available
+  focused
+  in_meeting
+  off_clock
+}
+
 model User {
   id          String   @id @default(cuid())
   firebaseUid String   @unique @map("firebase_uid")
@@ -30,6 +37,9 @@ model DaySchedule {
   workEnd     String   @map("work_end")
   lunchStart  String?  @map("lunch_start")
   lunchEnd    String?  @map("lunch_end")
+  status        ScheduleStatus?
+  statusUntil   String?         @map("status_until")
+  statusMessage String?         @map("status_message")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
