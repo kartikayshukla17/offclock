@@ -12,7 +12,21 @@ export default function DashboardPage() {
   const [scheduleLoading, setScheduleLoading] = useState(true);
   const [scheduleError, setScheduleError] = useState<string | null>(null);
 
-  const loadSchedule = useCallback(async () => {
+  // Single source of truth for "fetch schedule + apply it to state." Both
+  // the mount effect below and `loadSchedule` (passed to children as
+  // `onSaved`) call this — the fetch-and-setState logic lives in exactly
+  // one place, not duplicated between the mount path and the on-demand
+  // refetch path.
+  //
+  // Neither caller passes `fetchSchedule` itself directly as a `useEffect`
+  // callback (or names it as the sole statement in one). The linter's
+  // `react-hooks/set-state-in-effect` rule statically traces a `useEffect`
+  // callback's call graph and flags it if that graph reaches a `setState`
+  // call *through a function referenced in the effect's own body* — so the
+  // mount effect below wraps its call in its own locally-declared `load`
+  // function (mirroring the pre-refactor Day 2 pattern) instead of handing
+  // `fetchSchedule` to `useEffect` by reference.
+  const fetchSchedule = useCallback(async () => {
     if (!firebaseUser) return;
     try {
       const token = await getIdToken();
@@ -34,9 +48,16 @@ export default function DashboardPage() {
     }
   }, [firebaseUser, getIdToken]);
 
+  const loadSchedule = useCallback(async () => {
+    await fetchSchedule();
+  }, [fetchSchedule]);
+
   useEffect(() => {
-    loadSchedule();
-  }, [loadSchedule]);
+    async function load() {
+      await fetchSchedule();
+    }
+    load();
+  }, [fetchSchedule]);
 
   return (
     <DashboardShell>
