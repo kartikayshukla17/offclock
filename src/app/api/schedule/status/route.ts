@@ -55,6 +55,16 @@ export async function PATCH(request: NextRequest) {
   }
 
   if (
+    body.statusUntil !== undefined &&
+    typeof body.statusUntil !== "string"
+  ) {
+    return NextResponse.json(
+      { error: "statusUntil must be a string." },
+      { status: 400 },
+    );
+  }
+
+  if (
     body.statusMessage !== undefined &&
     typeof body.statusMessage !== "string"
   ) {

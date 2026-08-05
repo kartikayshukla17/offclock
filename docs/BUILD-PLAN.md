@@ -40,9 +40,9 @@
 - [ ] **Post:** Pain post — family interruptions
 
 ### Day 3 — Status toggle
-- [ ] Status enum: `available` | `focused` | `in_meeting` | `off_clock`
-- [ ] Optional "until" time + short message
-- [ ] Dashboard: big status buttons
+- [x] Status enum: `available` | `focused` | `in_meeting` | `off_clock`
+- [x] Optional "until" time + short message
+- [x] Dashboard: big status buttons
 - [ ] **Post:** Screenshot of dashboard (early UI OK)
 
 ### Day 4 — Public share page (hero)

@@ -14,19 +14,21 @@ export default function DashboardPage() {
   const [scheduleError, setScheduleError] = useState<string | null>(null);
 
   // Single source of truth for "fetch schedule + apply it to state." Both
-  // the mount effect below and `loadSchedule` (passed to children as
-  // `onSaved`) call this — the fetch-and-setState logic lives in exactly
-  // one place, not duplicated between the mount path and the on-demand
-  // refetch path.
+  // the mount effect below and the children (via the `onSaved` prop) call
+  // this — the fetch-and-setState logic lives in exactly one place, not
+  // duplicated between the mount path and the on-demand refetch path.
   //
-  // Neither caller passes `fetchSchedule` itself directly as a `useEffect`
-  // callback (or names it as the sole statement in one). The linter's
-  // `react-hooks/set-state-in-effect` rule statically traces a `useEffect`
-  // callback's call graph and flags it if that graph reaches a `setState`
-  // call *through a function referenced in the effect's own body* — so the
-  // mount effect below wraps its call in its own locally-declared `load`
-  // function (mirroring the pre-refactor Day 2 pattern) instead of handing
-  // `fetchSchedule` to `useEffect` by reference.
+  // The mount effect below does not pass `fetchSchedule` itself directly
+  // as a `useEffect` callback (or name it as the sole statement in one).
+  // The linter's `react-hooks/set-state-in-effect` rule statically traces
+  // a `useEffect` callback's call graph and flags it if that graph reaches
+  // a `setState` call *through a function referenced in the effect's own
+  // body* — so the mount effect below wraps its call in its own
+  // locally-declared `load` function (mirroring the pre-refactor Day 2
+  // pattern) instead of handing `fetchSchedule` to `useEffect` by
+  // reference. Passing `fetchSchedule` as a prop to a child component
+  // (invoked later from a click handler, not from the effect body) is
+  // unaffected by this rule, so no wrapper is needed for that path.
   const fetchSchedule = useCallback(async () => {
     if (!firebaseUser) return;
     try {
@@ -48,10 +50,6 @@ export default function DashboardPage() {
       setScheduleLoading(false);
     }
   }, [firebaseUser, getIdToken]);
-
-  const loadSchedule = useCallback(async () => {
-    await fetchSchedule();
-  }, [fetchSchedule]);
 
   useEffect(() => {
     async function load() {
@@ -81,12 +79,12 @@ export default function DashboardPage() {
           <DayScheduleForm
             schedule={schedule}
             loading={scheduleLoading}
-            onSaved={loadSchedule}
+            onSaved={fetchSchedule}
           />
           <StatusPanel
             schedule={schedule}
             loading={scheduleLoading}
-            onSaved={loadSchedule}
+            onSaved={fetchSchedule}
           />
           <PlaceholderCard
             title="Household page"

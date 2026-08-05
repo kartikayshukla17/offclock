@@ -129,7 +129,17 @@ export function StatusPanel({
           <button
             key={status}
             type="button"
-            onClick={() => setSelectedStatus(status)}
+            aria-pressed={selectedStatus === status}
+            onClick={() => {
+              setSelectedStatus(status);
+              if (schedule?.status === status) {
+                setStatusUntil(schedule.statusUntil ?? "");
+                setStatusMessage(schedule.statusMessage ?? "");
+              } else {
+                setStatusUntil("");
+                setStatusMessage("");
+              }
+            }}
             className={
               selectedStatus === status
                 ? "rounded-lg bg-teal-600 px-3 py-2 text-sm font-medium text-white"
