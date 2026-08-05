@@ -31,13 +31,13 @@
 - [x] Firebase Auth (Google + email)
 - [x] User profile: display name, slug (`/s/kartik`)
 - [x] Empty dashboard shell
-- [x] **Post:** Announce problem (see calendar)
+- [ ] **Post:** Announce problem (see calendar)
 
 ### Day 2 — Daily schedule
 - [x] Set work start / end for today
 - [x] Optional lunch window (start/end)
 - [x] Save to DB (Prisma: `User`, `DaySchedule`)
-- [ ] **Post:** Pain post — family interruptions
+- [x] **Post:** Pain post — family interruptions (posted 2026-08-04 on X)
 
 ### Day 3 — Status toggle
 - [x] Status enum: `available` | `focused` | `in_meeting` | `off_clock`
