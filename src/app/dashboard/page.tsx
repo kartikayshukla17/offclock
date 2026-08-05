@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { useAuth } from "@/components/auth-provider";
 import { DayScheduleForm } from "@/components/day-schedule-form";
+import { StatusPanel } from "@/components/status-panel";
 import { getLocalDateString, type Schedule } from "@/lib/schedule";
 
 export default function DashboardPage() {
@@ -67,7 +68,8 @@ export default function DashboardPage() {
             Good {getGreeting()}, {appUser?.displayName?.split(" ")[0] ?? "there"}
           </h1>
           <p className="mt-2 text-stone-600">
-            Set today&apos;s work hours below. Status toggles land tomorrow.
+            Set today&apos;s hours and status below. Your household page
+            lands soon.
           </p>
         </div>
 
@@ -81,9 +83,10 @@ export default function DashboardPage() {
             loading={scheduleLoading}
             onSaved={loadSchedule}
           />
-          <PlaceholderCard
-            title="Your status"
-            detail="Available / Focused / In meeting — Day 3"
+          <StatusPanel
+            schedule={schedule}
+            loading={scheduleLoading}
+            onSaved={loadSchedule}
           />
           <PlaceholderCard
             title="Household page"
