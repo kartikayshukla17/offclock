@@ -31,7 +31,7 @@
 - [x] Firebase Auth (Google + email)
 - [x] User profile: display name, slug (`/s/kartik`)
 - [x] Empty dashboard shell
-- [ ] **Post:** Announce problem (see calendar)
+- [x] **Post:** Announce problem (see calendar)
 
 ### Day 2 — Daily schedule
 - [x] Set work start / end for today
