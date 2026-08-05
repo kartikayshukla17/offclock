@@ -54,6 +54,16 @@ export async function PATCH(request: NextRequest) {
     );
   }
 
+  if (
+    body.statusMessage !== undefined &&
+    typeof body.statusMessage !== "string"
+  ) {
+    return NextResponse.json(
+      { error: "statusMessage must be a string." },
+      { status: 400 },
+    );
+  }
+
   const validationError = validateStatusUpdate({
     status: body.status,
     statusUntil: body.statusUntil,
