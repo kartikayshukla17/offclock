@@ -53,3 +53,50 @@ export function validateScheduleTimes(input: {
 
   return null;
 }
+
+export const SCHEDULE_STATUSES = [
+  "available",
+  "focused",
+  "in_meeting",
+  "off_clock",
+] as const;
+
+export type ScheduleStatusValue = (typeof SCHEDULE_STATUSES)[number];
+
+export function isValidStatus(value: string): value is ScheduleStatusValue {
+  return (SCHEDULE_STATUSES as readonly string[]).includes(value);
+}
+
+export function validateStatusUpdate(input: {
+  status: string;
+  statusUntil?: string;
+  statusMessage?: string;
+}): string | null {
+  if (!isValidStatus(input.status)) {
+    return "Status must be one of: available, focused, in_meeting, off_clock.";
+  }
+  if (
+    input.statusUntil !== undefined &&
+    input.statusUntil !== "" &&
+    !isValidTime(input.statusUntil)
+  ) {
+    return "Until time must be a valid time (HH:mm).";
+  }
+  if (
+    input.statusMessage !== undefined &&
+    input.statusMessage.trim().length > 80
+  ) {
+    return "Message must be 80 characters or less.";
+  }
+  return null;
+}
+
+export type Schedule = {
+  workStart: string;
+  workEnd: string;
+  lunchStart: string | null;
+  lunchEnd: string | null;
+  status: ScheduleStatusValue | null;
+  statusUntil: string | null;
+  statusMessage: string | null;
+};
