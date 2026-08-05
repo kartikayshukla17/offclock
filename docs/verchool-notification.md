@@ -53,6 +53,6 @@ Thanks!
 
 ## After sending
 
-- [ ] Message sent (date: ___________)
+- [x] Message sent (date: before Day 1 post — confirmed 2026-08-05, exact send date not logged here)
 - [ ] Screenshot or Sent folder saved
-- [ ] Proceed to Day 1 only after this is done
+- [x] Proceed to Day 1 only after this is done
