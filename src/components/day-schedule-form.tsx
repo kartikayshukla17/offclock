@@ -1,73 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
-import { getLocalDateString, validateScheduleTimes } from "@/lib/schedule";
+import { getLocalDateString, validateScheduleTimes, type Schedule } from "@/lib/schedule";
 
-type Schedule = {
-  workStart: string;
-  workEnd: string;
-  lunchStart: string | null;
-  lunchEnd: string | null;
-};
-
-export function DayScheduleForm() {
-  const { firebaseUser, getIdToken } = useAuth();
-  const [workStart, setWorkStart] = useState("");
-  const [workEnd, setWorkEnd] = useState("");
-  const [hasLunch, setHasLunch] = useState(false);
-  const [lunchStart, setLunchStart] = useState("");
-  const [lunchEnd, setLunchEnd] = useState("");
-  const [loading, setLoading] = useState(true);
+export function DayScheduleForm({
+  schedule,
+  loading,
+  onSaved,
+}: {
+  schedule: Schedule | null;
+  loading: boolean;
+  onSaved: () => void;
+}) {
+  const { getIdToken } = useAuth();
+  const [workStart, setWorkStart] = useState(schedule?.workStart ?? "");
+  const [workEnd, setWorkEnd] = useState(schedule?.workEnd ?? "");
+  const [hasLunch, setHasLunch] = useState(
+    Boolean(schedule?.lunchStart && schedule?.lunchEnd),
+  );
+  const [lunchStart, setLunchStart] = useState(schedule?.lunchStart ?? "");
+  const [lunchEnd, setLunchEnd] = useState(schedule?.lunchEnd ?? "");
+  const [syncedSchedule, setSyncedSchedule] = useState(schedule);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
 
-  useEffect(() => {
-    if (!firebaseUser) return;
-    let cancelled = false;
-
-    async function load() {
-      try {
-        const token = await getIdToken();
-        if (!token) return;
-        const res = await fetch(
-          `/api/schedule?date=${getLocalDateString()}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
-        if (cancelled) return;
-        if (res.ok) {
-          const data = (await res.json()) as { schedule: Schedule | null };
-          if (data.schedule) {
-            setWorkStart(data.schedule.workStart);
-            setWorkEnd(data.schedule.workEnd);
-            if (data.schedule.lunchStart && data.schedule.lunchEnd) {
-              setHasLunch(true);
-              setLunchStart(data.schedule.lunchStart);
-              setLunchEnd(data.schedule.lunchEnd);
-            }
-          }
-        } else {
-          setError("Couldn't load your schedule — try reloading.");
-        }
-      } catch {
-        if (!cancelled) {
-          setError("Couldn't load your schedule — try reloading.");
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [firebaseUser, getIdToken]);
+  // Seed local fields from `schedule` exactly once, the first time it
+  // arrives non-null (the parent's initial fetch completing). After that,
+  // this component's local state is authoritative — a later refetch
+  // triggered by a DIFFERENT panel saving (e.g. status) must not wipe
+  // whatever the user is mid-typing here. Do not change this to resync on
+  // every `schedule` prop change.
+  if (schedule !== null && syncedSchedule === null) {
+    setSyncedSchedule(schedule);
+    setWorkStart(schedule.workStart);
+    setWorkEnd(schedule.workEnd);
+    setHasLunch(Boolean(schedule.lunchStart && schedule.lunchEnd));
+    setLunchStart(schedule.lunchStart ?? "");
+    setLunchEnd(schedule.lunchEnd ?? "");
+  }
 
   async function handleSave() {
     setError(null);
@@ -116,6 +88,7 @@ export function DayScheduleForm() {
         return;
       }
       setSaved(true);
+      onSaved();
     } catch {
       setError("Couldn't save — check your connection and try again.");
     } finally {

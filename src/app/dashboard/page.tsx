@@ -1,11 +1,42 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { useAuth } from "@/components/auth-provider";
 import { DayScheduleForm } from "@/components/day-schedule-form";
+import { getLocalDateString, type Schedule } from "@/lib/schedule";
 
 export default function DashboardPage() {
-  const { appUser } = useAuth();
+  const { appUser, firebaseUser, getIdToken } = useAuth();
+  const [schedule, setSchedule] = useState<Schedule | null>(null);
+  const [scheduleLoading, setScheduleLoading] = useState(true);
+  const [scheduleError, setScheduleError] = useState<string | null>(null);
+
+  const loadSchedule = useCallback(async () => {
+    if (!firebaseUser) return;
+    try {
+      const token = await getIdToken();
+      if (!token) return;
+      const res = await fetch(`/api/schedule?date=${getLocalDateString()}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = (await res.json()) as { schedule: Schedule | null };
+        setSchedule(data.schedule);
+        setScheduleError(null);
+      } else {
+        setScheduleError("Couldn't load your schedule — try reloading.");
+      }
+    } catch {
+      setScheduleError("Couldn't load your schedule — try reloading.");
+    } finally {
+      setScheduleLoading(false);
+    }
+  }, [firebaseUser, getIdToken]);
+
+  useEffect(() => {
+    loadSchedule();
+  }, [loadSchedule]);
 
   return (
     <DashboardShell>
@@ -19,8 +50,16 @@ export default function DashboardPage() {
           </p>
         </div>
 
+        {scheduleError && (
+          <p className="text-sm text-red-600">{scheduleError}</p>
+        )}
+
         <div className="grid gap-4 sm:grid-cols-2">
-          <DayScheduleForm />
+          <DayScheduleForm
+            schedule={schedule}
+            loading={scheduleLoading}
+            onSaved={loadSchedule}
+          />
           <PlaceholderCard
             title="Your status"
             detail="Available / Focused / In meeting — Day 3"
