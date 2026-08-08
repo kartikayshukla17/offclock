@@ -100,3 +100,21 @@ export type Schedule = {
   statusUntil: string | null;
   statusMessage: string | null;
 };
+
+export const STATUS_LABELS: Record<ScheduleStatusValue, string> = {
+  available: "Available",
+  focused: "Focused",
+  in_meeting: "In a meeting",
+  off_clock: "Off the clock",
+};
+
+export function isStatusUntilStale(
+  statusUntil: string,
+  now: Date = new Date(),
+): boolean {
+  if (!isValidTime(statusUntil)) return false;
+  const [hours, minutes] = statusUntil.split(":").map(Number);
+  const untilMinutes = hours * 60 + minutes;
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+  return untilMinutes < nowMinutes;
+}

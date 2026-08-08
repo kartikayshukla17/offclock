@@ -4,18 +4,12 @@ import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import {
   SCHEDULE_STATUSES,
+  STATUS_LABELS,
   getLocalDateString,
   validateStatusUpdate,
   type Schedule,
   type ScheduleStatusValue,
 } from "@/lib/schedule";
-
-const STATUS_LABELS: Record<ScheduleStatusValue, string> = {
-  available: "Available",
-  focused: "Focused",
-  in_meeting: "In a meeting",
-  off_clock: "Off the clock",
-};
 
 export function StatusPanel({
   schedule,
