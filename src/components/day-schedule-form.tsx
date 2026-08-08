@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
+import { TimeSelect } from "@/components/time-select";
 import { getLocalDateString, validateScheduleTimes, type Schedule } from "@/lib/schedule";
 
 export function DayScheduleForm({
@@ -114,25 +115,19 @@ export function DayScheduleForm({
         Today&apos;s schedule
       </h2>
 
-      <div className="mt-4 flex items-center gap-3">
-        <label className="flex flex-col text-sm text-ink-2">
-          Start
-          <input
-            type="time"
-            value={workStart}
-            onChange={(e) => setWorkStart(e.target.value)}
-            className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none"
-          />
-        </label>
-        <label className="flex flex-col text-sm text-ink-2">
-          End
-          <input
-            type="time"
-            value={workEnd}
-            onChange={(e) => setWorkEnd(e.target.value)}
-            className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none"
-          />
-        </label>
+      <div className="mt-4 flex items-start gap-3">
+        <div className="flex flex-1 flex-col text-sm text-ink-2">
+          <span>Start</span>
+          <div className="mt-1">
+            <TimeSelect label="Work start" value={workStart} onChange={setWorkStart} />
+          </div>
+        </div>
+        <div className="flex flex-1 flex-col text-sm text-ink-2">
+          <span>End</span>
+          <div className="mt-1">
+            <TimeSelect label="Work end" value={workEnd} onChange={setWorkEnd} />
+          </div>
+        </div>
       </div>
 
       <label className="mt-4 flex items-center gap-2 text-sm text-ink-2">
@@ -146,25 +141,23 @@ export function DayScheduleForm({
       </label>
 
       {hasLunch && (
-        <div className="mt-2 flex items-center gap-3">
-          <label className="flex flex-col text-sm text-ink-2">
-            Lunch start
-            <input
-              type="time"
-              value={lunchStart}
-              onChange={(e) => setLunchStart(e.target.value)}
-              className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none"
-            />
-          </label>
-          <label className="flex flex-col text-sm text-ink-2">
-            Lunch end
-            <input
-              type="time"
-              value={lunchEnd}
-              onChange={(e) => setLunchEnd(e.target.value)}
-              className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none"
-            />
-          </label>
+        <div className="mt-2 flex items-start gap-3">
+          <div className="flex flex-1 flex-col text-sm text-ink-2">
+            <span>Lunch start</span>
+            <div className="mt-1">
+              <TimeSelect
+                label="Lunch start"
+                value={lunchStart}
+                onChange={setLunchStart}
+              />
+            </div>
+          </div>
+          <div className="flex flex-1 flex-col text-sm text-ink-2">
+            <span>Lunch end</span>
+            <div className="mt-1">
+              <TimeSelect label="Lunch end" value={lunchEnd} onChange={setLunchEnd} />
+            </div>
+          </div>
         </div>
       )}
 

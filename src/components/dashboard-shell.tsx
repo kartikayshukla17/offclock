@@ -54,7 +54,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={() => logout()}
-              className="focus-ring rounded-full px-3 py-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
+              className="focus-ring rounded-full px-3 py-1.5 text-danger transition-colors hover:bg-danger-bg"
             >
               Sign out
             </button>

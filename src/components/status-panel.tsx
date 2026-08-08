@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
+import { TimeSelect } from "@/components/time-select";
 import {
   SCHEDULE_STATUSES,
   STATUS_LABELS,
@@ -148,15 +149,16 @@ export function StatusPanel({
 
       {selectedStatus && (
         <div className="mt-4 space-y-3">
-          <label className="flex flex-col text-sm text-ink-2">
-            Until (optional)
-            <input
-              type="time"
-              value={statusUntil}
-              onChange={(e) => setStatusUntil(e.target.value)}
-              className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none"
-            />
-          </label>
+          <div className="flex max-w-[10rem] flex-col text-sm text-ink-2">
+            <span>Until (optional)</span>
+            <div className="mt-1">
+              <TimeSelect
+                label="Status until"
+                value={statusUntil}
+                onChange={setStatusUntil}
+              />
+            </div>
+          </div>
           <label className="flex flex-col text-sm text-ink-2">
             Short message (optional)
             <input
