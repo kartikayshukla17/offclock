@@ -1,3 +1,4 @@
+/* Hallmark · app component · design-system: design.md · designed-as-app */
 "use client";
 
 import { useState } from "react";
@@ -96,18 +97,18 @@ export function StatusPanel({
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-stone-200 bg-white p-5">
-        <h2 className="font-medium text-stone-800">Your status</h2>
-        <p className="mt-2 text-sm text-stone-500">Loading…</p>
+      <div className="rounded-card glass p-5">
+        <h2 className="font-display font-medium text-ink">Your status</h2>
+        <p className="mt-2 text-sm text-muted">Loading…</p>
       </div>
     );
   }
 
   if (!schedule) {
     return (
-      <div className="rounded-2xl border border-dashed border-stone-300 bg-white p-5">
-        <h2 className="font-medium text-stone-800">Your status</h2>
-        <p className="mt-2 text-sm text-stone-500">
+      <div className="rounded-card border border-dashed border-rule p-5">
+        <h2 className="font-display font-medium text-ink-2">Your status</h2>
+        <p className="mt-2 text-sm text-muted">
           Set today&apos;s hours first.
         </p>
       </div>
@@ -115,8 +116,8 @@ export function StatusPanel({
   }
 
   return (
-    <div className="rounded-2xl border border-stone-200 bg-white p-5">
-      <h2 className="font-medium text-stone-800">Your status</h2>
+    <div className="rounded-card glass p-5">
+      <h2 className="font-display font-medium text-ink">Your status</h2>
 
       <div className="mt-4 grid grid-cols-2 gap-2">
         {SCHEDULE_STATUSES.map((status) => (
@@ -136,8 +137,8 @@ export function StatusPanel({
             }}
             className={
               selectedStatus === status
-                ? "rounded-lg bg-teal-600 px-3 py-2 text-sm font-medium text-white"
-                : "rounded-lg border border-stone-300 px-3 py-2 text-sm text-stone-700 hover:bg-stone-50"
+                ? "focus-ring rounded-input bg-accent px-3 py-2 text-sm font-medium text-accent-ink transition-transform duration-150 ease-out active:translate-y-px"
+                : "focus-ring rounded-input border border-rule px-3 py-2 text-sm text-ink-2 transition-colors duration-150 ease-out hover:bg-paper-2"
             }
           >
             {STATUS_LABELS[status]}
@@ -147,16 +148,16 @@ export function StatusPanel({
 
       {selectedStatus && (
         <div className="mt-4 space-y-3">
-          <label className="flex flex-col text-sm text-stone-600">
+          <label className="flex flex-col text-sm text-ink-2">
             Until (optional)
             <input
               type="time"
               value={statusUntil}
               onChange={(e) => setStatusUntil(e.target.value)}
-              className="mt-1 rounded-lg border border-stone-300 px-2 py-1"
+              className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none"
             />
           </label>
-          <label className="flex flex-col text-sm text-stone-600">
+          <label className="flex flex-col text-sm text-ink-2">
             Short message (optional)
             <input
               type="text"
@@ -164,20 +165,22 @@ export function StatusPanel({
               value={statusMessage}
               onChange={(e) => setStatusMessage(e.target.value)}
               placeholder="Back in 10"
-              className="mt-1 rounded-lg border border-stone-300 px-2 py-1"
+              className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none placeholder:text-muted"
             />
           </label>
         </div>
       )}
 
-      {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
-      {saved && !error && <p className="mt-3 text-sm text-teal-700">Saved.</p>}
+      {error && <p className="mt-3 text-sm text-danger">{error}</p>}
+      {saved && !error && (
+        <p className="mt-3 text-sm text-accent">Saved.</p>
+      )}
 
       <button
         type="button"
         onClick={handleSave}
         disabled={saving}
-        className="mt-4 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 disabled:opacity-50"
+        className="focus-ring mt-4 rounded-pill bg-accent px-4 py-2 text-sm font-medium text-accent-ink transition-transform duration-150 ease-out hover:scale-[1.02] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
       >
         {saving ? "Saving…" : "Save status"}
       </button>

@@ -1,3 +1,4 @@
+/* Hallmark · app page · design-system: design.md · designed-as-app */
 "use client";
 
 import { FormEvent, useState } from "react";
@@ -55,34 +56,36 @@ export default function SetupPage() {
 
   return (
     <DashboardShell>
-      <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-        <h1 className="text-xl font-semibold">Set up your page</h1>
-        <p className="mt-2 text-sm text-stone-600">
+      <div className="rounded-card glass p-6">
+        <h1 className="font-display text-xl font-semibold">
+          Set up your page
+        </h1>
+        <p className="mt-2 text-sm text-ink-2">
           This is the name and link your household will see.
         </p>
 
         {error && (
-          <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+          <p className="mt-4 rounded-input bg-danger-bg px-3 py-2 text-sm text-danger">
             {error}
           </p>
         )}
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <label className="block text-sm">
-            <span className="font-medium text-stone-700">Your name</span>
+            <span className="font-medium text-ink">Your name</span>
             <input
               required
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Kartikay"
-              className="mt-1 w-full rounded-xl border border-stone-300 px-4 py-3 outline-none ring-teal-600 focus:ring-2"
+              className="mt-1 w-full rounded-input border border-rule bg-paper px-4 py-3 text-ink focus-ring outline-none placeholder:text-muted"
             />
           </label>
 
           <label className="block text-sm">
-            <span className="font-medium text-stone-700">Household link</span>
-            <div className="mt-1 flex overflow-hidden rounded-xl border border-stone-300">
-              <span className="flex items-center bg-stone-100 px-3 text-stone-500">
+            <span className="font-medium text-ink">Household link</span>
+            <div className="mt-1 flex overflow-hidden rounded-input border border-rule">
+              <span className="flex items-center bg-paper-2 px-3 text-muted">
                 /s/
               </span>
               <input
@@ -98,10 +101,10 @@ export default function SetupPage() {
                 }
                 onBlur={() => setSlug(normalizeSlug(slug))}
                 placeholder="kartikay-household"
-                className="flex-1 px-3 py-3 outline-none"
+                className="focus-ring flex-1 rounded-r-input bg-paper px-3 py-3 text-ink outline-none placeholder:text-muted"
               />
             </div>
-            <span className="mt-1 block text-xs text-stone-500">
+            <span className="mt-1 block text-xs text-muted">
               Lowercase letters, numbers, hyphens — e.g. kartikay-household
             </span>
           </label>
@@ -109,7 +112,7 @@ export default function SetupPage() {
           <button
             type="submit"
             disabled={saving}
-            className="w-full rounded-xl bg-teal-700 py-3 text-sm font-medium text-white hover:bg-teal-800 disabled:opacity-60"
+            className="focus-ring w-full rounded-input bg-accent py-3 text-sm font-medium text-accent-ink transition-transform duration-150 ease-out hover:scale-[1.01] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
           >
             {saving ? "Saving…" : "Continue to dashboard"}
           </button>

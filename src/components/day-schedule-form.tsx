@@ -1,3 +1,4 @@
+/* Hallmark · app component · design-system: design.md · designed-as-app */
 "use client";
 
 import { useState } from "react";
@@ -98,78 +99,85 @@ export function DayScheduleForm({
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-stone-200 bg-white p-5">
-        <h2 className="font-medium text-stone-800">Today&apos;s schedule</h2>
-        <p className="mt-2 text-sm text-stone-500">Loading…</p>
+      <div className="rounded-card glass p-5">
+        <h2 className="font-display font-medium text-ink">
+          Today&apos;s schedule
+        </h2>
+        <p className="mt-2 text-sm text-muted">Loading…</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-stone-200 bg-white p-5">
-      <h2 className="font-medium text-stone-800">Today&apos;s schedule</h2>
+    <div className="rounded-card glass p-5">
+      <h2 className="font-display font-medium text-ink">
+        Today&apos;s schedule
+      </h2>
 
       <div className="mt-4 flex items-center gap-3">
-        <label className="flex flex-col text-sm text-stone-600">
+        <label className="flex flex-col text-sm text-ink-2">
           Start
           <input
             type="time"
             value={workStart}
             onChange={(e) => setWorkStart(e.target.value)}
-            className="mt-1 rounded-lg border border-stone-300 px-2 py-1"
+            className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none"
           />
         </label>
-        <label className="flex flex-col text-sm text-stone-600">
+        <label className="flex flex-col text-sm text-ink-2">
           End
           <input
             type="time"
             value={workEnd}
             onChange={(e) => setWorkEnd(e.target.value)}
-            className="mt-1 rounded-lg border border-stone-300 px-2 py-1"
+            className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none"
           />
         </label>
       </div>
 
-      <label className="mt-4 flex items-center gap-2 text-sm text-stone-600">
+      <label className="mt-4 flex items-center gap-2 text-sm text-ink-2">
         <input
           type="checkbox"
           checked={hasLunch}
           onChange={(e) => setHasLunch(e.target.checked)}
+          className="h-4 w-4 accent-accent"
         />
         Add lunch window
       </label>
 
       {hasLunch && (
         <div className="mt-2 flex items-center gap-3">
-          <label className="flex flex-col text-sm text-stone-600">
+          <label className="flex flex-col text-sm text-ink-2">
             Lunch start
             <input
               type="time"
               value={lunchStart}
               onChange={(e) => setLunchStart(e.target.value)}
-              className="mt-1 rounded-lg border border-stone-300 px-2 py-1"
+              className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none"
             />
           </label>
-          <label className="flex flex-col text-sm text-stone-600">
+          <label className="flex flex-col text-sm text-ink-2">
             Lunch end
             <input
               type="time"
               value={lunchEnd}
               onChange={(e) => setLunchEnd(e.target.value)}
-              className="mt-1 rounded-lg border border-stone-300 px-2 py-1"
+              className="mt-1 rounded-input border border-rule bg-paper px-2 py-1.5 text-ink focus-ring outline-none"
             />
           </label>
         </div>
       )}
 
-      {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
-      {saved && !error && <p className="mt-3 text-sm text-teal-700">Saved.</p>}
+      {error && <p className="mt-3 text-sm text-danger">{error}</p>}
+      {saved && !error && (
+        <p className="mt-3 text-sm text-accent">Saved.</p>
+      )}
 
       <button
         type="button"
         onClick={handleSave}
         disabled={saving}
-        className="mt-4 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 disabled:opacity-50"
+        className="focus-ring mt-4 rounded-pill bg-accent px-4 py-2 text-sm font-medium text-accent-ink transition-transform duration-150 ease-out hover:scale-[1.02] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
       >
         {saving ? "Saving…" : "Save"}
       </button>

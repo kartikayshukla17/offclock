@@ -1,26 +1,115 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "../../tokens.css";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--color-paper);
+  --color-paper-2: var(--color-paper-2);
+  --color-paper-3: var(--color-paper-3);
+  --color-ink: var(--color-ink);
+  --color-ink-2: var(--color-ink-2);
+  --color-rule: var(--color-rule);
+  --color-rule-2: var(--color-rule-2);
+  --color-muted: var(--color-muted);
+  --color-accent: var(--color-accent);
+  --color-accent-ink: var(--color-accent-ink);
+  --color-focus: var(--color-focus);
+  --color-danger: var(--color-danger);
+  --color-danger-bg: var(--color-danger-bg);
+
+  --color-status-available: var(--color-status-available);
+  --color-status-available-ink: var(--color-status-available-ink);
+  --color-status-focused: var(--color-status-focused);
+  --color-status-focused-ink: var(--color-status-focused-ink);
+  --color-status-meeting: var(--color-status-meeting);
+  --color-status-meeting-ink: var(--color-status-meeting-ink);
+  --color-status-off: var(--color-status-off);
+  --color-status-off-ink: var(--color-status-off-ink);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  --radius-card: var(--radius-card);
+  --radius-pill: var(--radius-pill);
+  --radius-input: var(--radius-input);
+
+  --text-display: var(--text-display);
+  --text-display-s: var(--text-display-s);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  overflow-x: clip;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+/* Hallmark glass material — used by every card/panel across the app */
+.glass {
+  background: var(--color-glass);
+  border: 1px solid var(--color-glass-border);
+  backdrop-filter: blur(var(--blur-glass)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(140%);
+}
+
+/* Hallmark · focus ring — outline-based per interaction-and-states gate 39,
+   not a box-shadow ring. Instant on focus, never transitioned. */
+.focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+}
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-focus);
+}
+
+/* Hallmark · Tier-A CSS art · share-page-only backdrop.
+   Glass only reads as glass when there's color behind it to blur — a flat
+   single-tone page makes backdrop-filter invisible. Two soft, static
+   colour fields (teal + a warm complement) give the blur something to do.
+   Per-page allowance beyond design.md's "app pages: no enrichment" rule,
+   scoped to /s/[slug] only — this is the page meant to be screenshotted.
+   Sized and dimmed to stay clear of the 5% accent-footprint gate — this
+   is ambient tint, not a design element in its own right. */
+.share-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--color-paper);
+}
+
+.share-backdrop::before,
+.share-backdrop::after {
+  content: "";
+  position: absolute;
+  width: 42vmax;
+  height: 42vmax;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+
+.share-backdrop::before {
+  top: -16vmax;
+  left: -12vmax;
+  background: var(--color-backdrop-1);
+}
+
+.share-backdrop::after {
+  bottom: -18vmax;
+  right: -12vmax;
+  background: var(--color-backdrop-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

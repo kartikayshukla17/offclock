@@ -1,3 +1,4 @@
+/* Hallmark · app chrome · design-system: design.md · designed-as-app */
 "use client";
 
 import Link from "next/link";
@@ -23,8 +24,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   if (loading || !firebaseUser) {
     return (
-      <div className="flex min-h-full items-center justify-center bg-stone-50">
-        <p className="text-sm text-stone-500">Loading…</p>
+      <div className="flex min-h-full items-center justify-center bg-paper">
+        <p className="text-sm text-muted">Loading…</p>
       </div>
     );
   }
@@ -37,20 +38,23 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         : null;
 
   return (
-    <div className="min-h-full bg-stone-50 text-stone-900">
-      <header className="border-b border-stone-200 bg-white">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
-          <Link href="/dashboard" className="font-semibold tracking-tight">
+    <div className="min-h-full bg-paper text-ink">
+      <header className="sticky top-0 z-10 px-4 pt-4">
+        <div className="mx-auto flex max-w-3xl items-center justify-between rounded-full glass px-5 py-2.5 shadow-sm">
+          <Link
+            href="/dashboard"
+            className="font-display text-sm font-bold tracking-tight"
+          >
             OffClock
           </Link>
           <div className="flex items-center gap-3 text-sm">
-            <span className="hidden text-stone-500 sm:inline">
+            <span className="hidden text-ink-2 sm:inline">
               {appUser?.displayName ?? appUser?.email}
             </span>
             <button
               type="button"
               onClick={() => logout()}
-              className="rounded-lg px-3 py-1.5 text-stone-600 hover:bg-stone-100"
+              className="focus-ring rounded-full px-3 py-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
             >
               Sign out
             </button>
@@ -60,13 +64,16 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
       <main className="mx-auto max-w-3xl px-4 py-8">
         {appUser?.slug && shareUrl && pathname === "/dashboard" && (
-          <div className="mb-6 rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
+          <div className="mb-6 rounded-card glass px-4 py-3 text-sm text-ink">
             Your household link:{" "}
-            <Link href={shareUrl} className="font-medium underline">
+            <Link
+              href={shareUrl}
+              className="font-medium text-accent underline"
+            >
               {shareUrl.replace(/^https?:\/\//, "")}
             </Link>
-            <span className="mt-1 block text-teal-700">
-              Share page goes live on Day 4 — link preview only for now.
+            <span className="mt-1 block text-ink-2">
+              Open it on the kitchen tablet — it updates itself.
             </span>
           </div>
         )}

@@ -1,6 +1,8 @@
+/* Hallmark · app page · design-system: design.md · designed-as-app */
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { useAuth } from "@/components/auth-provider";
 import { DayScheduleForm } from "@/components/day-schedule-form";
@@ -58,21 +60,24 @@ export default function DashboardPage() {
     load();
   }, [fetchSchedule]);
 
+  const shareHref = appUser?.slug ? `/s/${appUser.slug}` : null;
+
   return (
     <DashboardShell>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Good {getGreeting()}, {appUser?.displayName?.split(" ")[0] ?? "there"}
+          <h1 className="font-display text-2xl font-semibold tracking-tight">
+            Good {getGreeting()},{" "}
+            {appUser?.displayName?.split(" ")[0] ?? "there"}
           </h1>
-          <p className="mt-2 text-stone-600">
-            Set today&apos;s hours and status below. Your household page
-            lands soon.
+          <p className="mt-2 text-ink-2">
+            Set today&apos;s hours and status below — your household reads
+            it from the share page.
           </p>
         </div>
 
         {scheduleError && (
-          <p className="text-sm text-red-600">{scheduleError}</p>
+          <p className="text-sm text-danger">{scheduleError}</p>
         )}
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -86,10 +91,24 @@ export default function DashboardPage() {
             loading={scheduleLoading}
             onSaved={fetchSchedule}
           />
-          <PlaceholderCard
-            title="Household page"
-            detail="Public share view — Day 4"
-          />
+          {shareHref ? (
+            <Link
+              href={shareHref}
+              className="rounded-card glass p-5 transition-transform duration-150 ease-out hover:scale-[1.01]"
+            >
+              <h2 className="font-display font-medium text-ink">
+                Household page
+              </h2>
+              <p className="mt-2 text-sm text-ink-2">
+                See exactly what they see — opens {shareHref}
+              </p>
+            </Link>
+          ) : (
+            <PlaceholderCard
+              title="Household page"
+              detail="Set up your link above to see it"
+            />
+          )}
           <PlaceholderCard
             title="Shutdown ritual"
             detail="Off the clock flow — Day 6"
@@ -108,9 +127,9 @@ function PlaceholderCard({
   detail: string;
 }) {
   return (
-    <div className="rounded-2xl border border-dashed border-stone-300 bg-white p-5">
-      <h2 className="font-medium text-stone-800">{title}</h2>
-      <p className="mt-2 text-sm text-stone-500">{detail}</p>
+    <div className="rounded-card border border-dashed border-rule p-5">
+      <h2 className="font-display font-medium text-ink-2">{title}</h2>
+      <p className="mt-2 text-sm text-muted">{detail}</p>
     </div>
   );
 }

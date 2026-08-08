@@ -1,0 +1,64 @@
+/* Hallmark · design-system: design.md · designed-as-app */
+:root {
+  --color-paper: oklch(97% 0.012 85);
+  --color-paper-2: oklch(94% 0.014 85);
+  --color-paper-3: oklch(90% 0.016 85);
+  --color-ink: oklch(20% 0.012 195);
+  --color-ink-2: oklch(38% 0.012 195);
+  --color-rule: oklch(80% 0.014 195);
+  --color-rule-2: oklch(86% 0.01 195);
+  --color-muted: oklch(42% 0.014 195);
+  --color-accent: oklch(62% 0.13 195);
+  --color-accent-ink: oklch(13% 0.03 195);
+  --color-focus: oklch(60% 0.2 195);
+  --color-glass: oklch(98% 0.01 85 / 0.55);
+  --color-glass-border: oklch(100% 0 0 / 0.45);
+  --color-danger: oklch(50% 0.18 25);
+  --color-danger-bg: oklch(95% 0.03 25);
+
+  --color-status-available: oklch(72% 0.1 165);
+  --color-status-available-ink: oklch(18% 0.05 165);
+  --color-status-focused: oklch(76% 0.1 75);
+  --color-status-focused-ink: oklch(24% 0.06 75);
+  --color-status-meeting: oklch(70% 0.14 25);
+  --color-status-meeting-ink: oklch(19% 0.06 25);
+  --color-status-off: oklch(85% 0.01 195);
+  --color-status-off-ink: oklch(26% 0.012 195);
+
+  --color-backdrop-1: oklch(80% 0.1 195 / 0.5);
+  --color-backdrop-2: oklch(85% 0.08 75 / 0.4);
+
+  --font-display: var(--font-bricolage), ui-sans-serif, sans-serif;
+  --font-body: var(--font-geist-sans), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+  --space-3xl: 7rem;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.25rem;
+  --text-display: clamp(2.25rem, 5vw + 1rem, 3.5rem);
+  --text-display-s: clamp(1.75rem, 3vw + 1rem, 2.5rem);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-short: 160ms;
+  --dur-med: 220ms;
+
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+  --radius-input: 0.75rem;
+
+  --blur-glass: 20px;
+}
