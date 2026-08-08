@@ -8,6 +8,7 @@ import {
   SCHEDULE_STATUSES,
   STATUS_LABELS,
   getLocalDateString,
+  getLocalTimeString,
   validateStatusUpdate,
   type Schedule,
   type ScheduleStatusValue,
@@ -156,6 +157,7 @@ export function StatusPanel({
                 label="Status until"
                 value={statusUntil}
                 onChange={setStatusUntil}
+                disableBefore={getLocalTimeString()}
               />
             </div>
           </div>
