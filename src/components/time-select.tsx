@@ -89,9 +89,9 @@ export function TimeSelect({
           id={listId}
           role="dialog"
           aria-label={`${label} picker`}
-          className="absolute left-0 top-[calc(100%+0.5rem)] z-20 flex w-48 gap-1 rounded-card glass p-2 shadow-lg"
+          className="absolute left-0 top-[calc(100%+0.5rem)] z-20 flex h-56 w-48 min-h-0 gap-1 rounded-card border border-rule bg-paper p-2 shadow-lg"
         >
-          <div className="flex max-h-48 flex-1 flex-col gap-0.5 overflow-y-auto">
+          <div className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto">
             <p className="px-2 pb-1 text-xs font-medium uppercase tracking-wide text-muted">
               Hour
             </p>
@@ -111,7 +111,7 @@ export function TimeSelect({
               </button>
             ))}
           </div>
-          <div className="flex flex-1 flex-col gap-0.5">
+          <div className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto">
             <p className="px-2 pb-1 text-xs font-medium uppercase tracking-wide text-muted">
               Min
             </p>
