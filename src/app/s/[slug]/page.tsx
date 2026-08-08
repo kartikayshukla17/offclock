@@ -2,7 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import { STATUS_LABELS, isStatusUntilStale } from "@/lib/schedule";
+import {
+  STATUS_LABELS,
+  isStatusUntilStale,
+  getLocalDateString,
+  type ScheduleStatusValue,
+} from "@/lib/schedule";
 
 type ShareData = {
   displayName: string | null;
@@ -11,12 +16,12 @@ type ShareData = {
   workEnd?: string;
   lunchStart?: string | null;
   lunchEnd?: string | null;
-  status?: "available" | "focused" | "in_meeting" | "off_clock" | null;
+  status?: ScheduleStatusValue | null;
   statusUntil?: string | null;
   statusMessage?: string | null;
 };
 
-const STATUS_COLORS: Record<string, string> = {
+const STATUS_COLORS: Record<ScheduleStatusValue, string> = {
   available: "bg-teal-100 text-teal-900",
   focused: "bg-amber-100 text-amber-900",
   in_meeting: "bg-red-100 text-red-900",
@@ -38,7 +43,9 @@ export default function SharePage() {
 
     async function fetchShare() {
       try {
-        const res = await fetch(`/api/s/${slug}`);
+        const res = await fetch(
+          `/api/s/${encodeURIComponent(slug)}?date=${getLocalDateString()}`,
+        );
         if (cancelled) return;
         if (res.status === 404) {
           setNotFound(true);
