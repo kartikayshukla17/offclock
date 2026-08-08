@@ -9,7 +9,7 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <div className="min-h-full bg-paper text-ink">
-      <nav className="sticky top-4 z-10 mx-auto flex w-fit items-center gap-6 rounded-full glass px-5 py-2.5 shadow-sm">
+      <nav className="mx-auto mt-4 flex w-fit items-center gap-6 rounded-full glass px-5 py-2.5 shadow-sm">
         <span className="font-display text-sm font-bold tracking-tight">
           OffClock
         </span>
@@ -60,7 +60,7 @@ export default function HomePage() {
         </figure>
 
         <div className="mt-14 space-y-1 text-lg leading-relaxed text-ink-2">
-          <p>Building this in public, one day at a time.</p>
+          <p>Still building. Status and hours are live — shutdown ritual is next.</p>
           <p>— Kartikay</p>
         </div>
 
