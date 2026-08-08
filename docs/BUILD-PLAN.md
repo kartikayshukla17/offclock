@@ -46,9 +46,9 @@
 - [ ] **Post:** Screenshot of dashboard (early UI OK)
 
 ### Day 4 — Public share page (hero)
-- [ ] `/s/[slug]` — read-only, no auth, mobile-first
-- [ ] Shows: name, work hours, current status, message, lunch window
-- [ ] Auto-refresh or 30s polling (no WebSocket v1)
+- [x] `/s/[slug]` — read-only, no auth, mobile-first
+- [x] Shows: name, work hours, current status, message, lunch window
+- [x] Auto-refresh or 30s polling (no WebSocket v1)
 - [ ] Public repo + README
 - [ ] **Post:** Share page on phone mockup
 
