@@ -2,22 +2,30 @@
 
 Shareable status page for WFH households — plus a 5-minute shutdown ritual so work actually ends.
 
-**Status:** Day 1 — auth + profile + dashboard shell
+*Your household knows when you're off the clock.*
 
-## Docs
+One link, no login for them, no app to install. Set your hours and status once; the page they open updates itself every 30 seconds.
 
-| File | Purpose |
-|------|---------|
-| [docs/BUILD-PLAN.md](docs/BUILD-PLAN.md) | 14-day dev schedule |
-| [docs/BUILD-IN-PUBLIC-CALENDAR.md](docs/BUILD-IN-PUBLIC-CALENDAR.md) | Daily posts + channel guide |
-| [docs/COMPLIANCE.md](docs/COMPLIANCE.md) | Verchool MOU/NDA review |
-| [docs/verchool-notification.md](docs/verchool-notification.md) | Notification sent ✓ |
+**Status:** Days 1–4 shipped — auth, daily schedule, status toggle (available / focused / in a meeting / off the clock), and the public share page are all live. Copy-link + QR code (Day 5) is next.
+
+## How it works
+
+- `/dashboard` (auth required) — set today's work hours, optional lunch window, and your current status with an optional "back by" time and short note
+- `/s/[your-slug]` (no login) — the page your household actually opens: your hours, status, and message, polling for updates every 30s
 
 ## Stack
 
-- **App:** Next.js 16 (App Router) + Tailwind 4
+- **App:** Next.js 16 (App Router) + React 19 + Tailwind 4
 - **Auth:** Firebase Auth (Google + email)
 - **DB:** Prisma + Neon Postgres
+- **Design:** custom OKLCH token system (`design.md`, `tokens.css`) — glassmorphism cards, Bricolage Grotesque + Geist type
+
+## Dev docs
+
+| File | Purpose |
+|------|---------|
+| [docs/BUILD-PLAN.md](docs/BUILD-PLAN.md) | 14-day build schedule |
+| [design.md](design.md) | Locked design system every page reads from |
 
 ## Local setup
 
@@ -32,6 +40,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) → Sign in → `/setup` → `/dashboard`
 
-## Positioning
+## License
 
-*Your household knows when you're off the clock.*
+MIT — see [LICENSE](LICENSE).
