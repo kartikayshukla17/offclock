@@ -54,7 +54,7 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
   }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- browser-only feature detection must run post-mount, not during render/SSR, to avoid a hydration mismatch
     setCanShare(typeof navigator !== "undefined" && "share" in navigator);
   }, []);
 
@@ -74,8 +74,9 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
     if (!qrDataUrl) return;
     setQrCopyError(null);
     try {
-      const blob = await fetch(qrDataUrl).then((r) => r.blob());
-      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+      await navigator.clipboard.write([
+        new ClipboardItem({ "image/png": fetch(qrDataUrl).then((r) => r.blob()) }),
+      ]);
       setQrCopied(true);
       if (qrCopyTimeoutRef.current) clearTimeout(qrCopyTimeoutRef.current);
       qrCopyTimeoutRef.current = setTimeout(() => setQrCopied(false), 2000);
@@ -91,7 +92,8 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
     try {
       await navigator.share({ title: "OffClock", url: toAbsoluteUrl(shareUrl) });
     } catch (err) {
-      if (err instanceof Error && err.name === "AbortError") return;
+      if (err instanceof Error && (err.name === "AbortError" || err.name === "InvalidStateError"))
+        return;
       setShareError("Couldn't open the share sheet.");
     }
   }
@@ -99,7 +101,10 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
   function toggleQr() {
     setShowQr((v) => {
       const next = !v;
-      if (next) setQrError(null);
+      if (next) {
+        setQrError(null);
+        setQrCopyError(null);
+      }
       return next;
     });
   }
