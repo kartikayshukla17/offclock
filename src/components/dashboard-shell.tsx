@@ -39,7 +39,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-full bg-paper text-ink">
-      <header className="sticky top-0 z-10 px-4 pt-4">
+      <header className="px-4 pt-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between rounded-full glass px-5 py-2.5 shadow-sm">
           <Link
             href="/dashboard"
