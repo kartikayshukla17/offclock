@@ -6,7 +6,7 @@ Shareable status page for WFH households — plus a 5-minute shutdown ritual so 
 
 One link, no login for them, no app to install. Set your hours and status once; the page they open updates itself every 30 seconds.
 
-**Status:** Days 1–4 shipped — auth, daily schedule, status toggle (available / focused / in a meeting / off the clock), and the public share page are all live. Copy-link + QR code (Day 5) is next.
+**Status:** Days 1–5 shipped — auth, daily schedule, status toggle (available / focused / in a meeting / off the clock), the public share page, and one-click copy + QR code for the share link are all live. Shutdown ritual (Day 6) is next.
 
 ## How it works
 

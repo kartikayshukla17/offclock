@@ -23,7 +23,7 @@
 
 ### Day 0 — Compliance (no code)
 - [x] Send Verchool notification ([verchool-notification.md](verchool-notification.md))
-- [ ] Create GitHub repo (private OK until Day 4)
+- [x] Create GitHub repo (public)
 - [x] Scaffold: Next.js App Router, Prisma, Neon, Firebase Auth
 - [x] **Post:** None
 
@@ -49,12 +49,12 @@
 - [x] `/s/[slug]` — read-only, no auth, mobile-first
 - [x] Shows: name, work hours, current status, message, lunch window
 - [x] Auto-refresh or 30s polling (no WebSocket v1)
-- [ ] Public repo + README
+- [x] Public repo + README
 - [ ] **Post:** Share page on phone mockup
 
 ### Day 5 — Share link + QR
-- [ ] Copy link button on dashboard
-- [ ] QR code generator (canvas or API) for "stick on fridge"
+- [x] Copy link button on dashboard
+- [x] QR code generator (client-side `qrcode` package) for "stick on fridge"
 - [ ] **Post:** "Kitchen tablet test" — partner opens link
 
 ### Day 6 — Shutdown ritual (step 1–3)
