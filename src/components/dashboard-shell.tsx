@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth } from "@/components/auth-provider";
+import { ShareLinkBanner } from "@/components/share-link-banner";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const { firebaseUser, appUser, loading, logout } = useAuth();
@@ -64,18 +65,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
       <main className="mx-auto max-w-3xl px-4 py-8">
         {appUser?.slug && shareUrl && pathname === "/dashboard" && (
-          <div className="mb-6 rounded-card glass px-4 py-3 text-sm text-ink">
-            Your household link:{" "}
-            <Link
-              href={shareUrl}
-              className="font-medium text-accent underline"
-            >
-              {shareUrl.replace(/^https?:\/\//, "")}
-            </Link>
-            <span className="mt-1 block text-ink-2">
-              Open it on the kitchen tablet — it updates itself.
-            </span>
-          </div>
+          <ShareLinkBanner shareUrl={shareUrl} />
         )}
         {children}
       </main>
