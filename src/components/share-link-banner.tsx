@@ -16,7 +16,10 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
   const [qrError, setQrError] = useState<string | null>(null);
   const [canShare, setCanShare] = useState(false);
   const [shareError, setShareError] = useState<string | null>(null);
+  const [qrCopied, setQrCopied] = useState(false);
+  const [qrCopyError, setQrCopyError] = useState<string | null>(null);
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const qrCopyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const qrPanelId = useId();
 
   useEffect(() => {
@@ -46,6 +49,7 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
   useEffect(() => {
     return () => {
       if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+      if (qrCopyTimeoutRef.current) clearTimeout(qrCopyTimeoutRef.current);
     };
   }, []);
 
@@ -63,6 +67,22 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
       copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
     } catch {
       setCopyError("Couldn't copy — select and copy the link manually.");
+    }
+  }
+
+  async function handleCopyQrImage() {
+    if (!qrDataUrl) return;
+    setQrCopyError(null);
+    try {
+      const blob = await fetch(qrDataUrl).then((r) => r.blob());
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+      setQrCopied(true);
+      if (qrCopyTimeoutRef.current) clearTimeout(qrCopyTimeoutRef.current);
+      qrCopyTimeoutRef.current = setTimeout(() => setQrCopied(false), 2000);
+    } catch {
+      setQrCopyError(
+        "Couldn't copy the image — right-click (or long-press) it to save or copy instead.",
+      );
     }
   }
 
@@ -128,15 +148,25 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
       {showQr && (
         <div id={qrPanelId} className="mt-3 inline-block rounded-card bg-white p-3">
           {qrDataUrl && (
-            // eslint-disable-next-line @next/next/no-img-element -- data: URL, generated client-side, no benefit from next/image's remote-fetch optimization pipeline
-            <img
-              src={qrDataUrl}
-              alt="QR code for your household link"
-              width={200}
-              height={200}
-            />
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element -- data: URL, generated client-side, no benefit from next/image's remote-fetch optimization pipeline */}
+              <img
+                src={qrDataUrl}
+                alt="QR code for your household link"
+                width={200}
+                height={200}
+              />
+              <button
+                type="button"
+                onClick={handleCopyQrImage}
+                className="focus-ring mt-2 block w-full rounded-pill border border-rule px-3 py-1.5 text-sm font-medium text-ink-2 transition-colors duration-150 ease-out hover:bg-paper-2"
+              >
+                {qrCopied ? "Copied!" : "Copy image"}
+              </button>
+            </>
           )}
           {qrError && <p className="text-sm text-danger">{qrError}</p>}
+          {qrCopyError && <p className="mt-2 text-sm text-danger">{qrCopyError}</p>}
         </div>
       )}
     </div>
