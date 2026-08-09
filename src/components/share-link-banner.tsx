@@ -4,12 +4,18 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 
+function toAbsoluteUrl(shareUrl: string): string {
+  return new URL(shareUrl, window.location.origin).href;
+}
+
 export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState<string | null>(null);
   const [showQr, setShowQr] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [qrError, setQrError] = useState<string | null>(null);
+  const [canShare, setCanShare] = useState(false);
+  const [shareError, setShareError] = useState<string | null>(null);
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const qrPanelId = useId();
 
@@ -21,8 +27,9 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
     async function generate() {
       try {
         const { default: QRCode } = await import("qrcode");
-        const absoluteUrl = new URL(shareUrl, window.location.origin).href;
-        const dataUrl = await QRCode.toDataURL(absoluteUrl, { width: 200 });
+        const dataUrl = await QRCode.toDataURL(toAbsoluteUrl(shareUrl), {
+          width: 200,
+        });
         if (!cancelled) setQrDataUrl(dataUrl);
       } catch {
         if (!cancelled) setQrError("Couldn't generate QR code.");
@@ -42,16 +49,30 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
     };
   }, []);
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCanShare(typeof navigator !== "undefined" && "share" in navigator);
+  }, []);
+
   async function handleCopy() {
     setCopyError(null);
     try {
-      const absoluteUrl = new URL(shareUrl, window.location.origin).href;
-      await navigator.clipboard.writeText(absoluteUrl);
+      await navigator.clipboard.writeText(toAbsoluteUrl(shareUrl));
       setCopied(true);
       if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
       copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
     } catch {
       setCopyError("Couldn't copy — select and copy the link manually.");
+    }
+  }
+
+  async function handleShare() {
+    setShareError(null);
+    try {
+      await navigator.share({ title: "OffClock", url: toAbsoluteUrl(shareUrl) });
+    } catch (err) {
+      if (err instanceof Error && err.name === "AbortError") return;
+      setShareError("Couldn't open the share sheet.");
     }
   }
 
@@ -81,6 +102,15 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
         >
           {copied ? "Copied!" : "Copy link"}
         </button>
+        {canShare && (
+          <button
+            type="button"
+            onClick={handleShare}
+            className="focus-ring rounded-pill border border-rule px-3 py-1.5 text-sm font-medium text-ink-2 transition-colors duration-150 ease-out hover:bg-paper-2"
+          >
+            Share
+          </button>
+        )}
         <button
           type="button"
           aria-expanded={showQr}
@@ -93,6 +123,7 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
       </div>
 
       {copyError && <p className="mt-2 text-sm text-danger">{copyError}</p>}
+      {shareError && <p className="mt-2 text-sm text-danger">{shareError}</p>}
 
       {showQr && (
         <div id={qrPanelId} className="mt-3 inline-block rounded-card bg-white p-3">
