@@ -1,8 +1,8 @@
+/* Hallmark · app component · design-system: design.md · designed-as-app */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
-import QRCode from "qrcode";
 
 export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
   const [copied, setCopied] = useState(false);
@@ -10,23 +10,57 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
   const [showQr, setShowQr] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [qrError, setQrError] = useState<string | null>(null);
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const qrPanelId = useId();
 
   useEffect(() => {
     if (!showQr || qrDataUrl || qrError) return;
-    QRCode.toDataURL(shareUrl, { width: 200 })
-      .then(setQrDataUrl)
-      .catch(() => setQrError("Couldn't generate QR code."));
+
+    let cancelled = false;
+
+    async function generate() {
+      try {
+        const { default: QRCode } = await import("qrcode");
+        const absoluteUrl = new URL(shareUrl, window.location.origin).href;
+        const dataUrl = await QRCode.toDataURL(absoluteUrl, { width: 200 });
+        if (!cancelled) setQrDataUrl(dataUrl);
+      } catch {
+        if (!cancelled) setQrError("Couldn't generate QR code.");
+      }
+    }
+
+    generate();
+
+    return () => {
+      cancelled = true;
+    };
   }, [showQr, qrDataUrl, qrError, shareUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+    };
+  }, []);
 
   async function handleCopy() {
     setCopyError(null);
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      const absoluteUrl = new URL(shareUrl, window.location.origin).href;
+      await navigator.clipboard.writeText(absoluteUrl);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current);
+      copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
     } catch {
       setCopyError("Couldn't copy — select and copy the link manually.");
     }
+  }
+
+  function toggleQr() {
+    setShowQr((v) => {
+      const next = !v;
+      if (next) setQrError(null);
+      return next;
+    });
   }
 
   return (
@@ -49,7 +83,9 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
         </button>
         <button
           type="button"
-          onClick={() => setShowQr((v) => !v)}
+          aria-expanded={showQr}
+          aria-controls={qrPanelId}
+          onClick={toggleQr}
           className="focus-ring rounded-pill border border-rule px-3 py-1.5 text-sm font-medium text-ink-2 transition-colors duration-150 ease-out hover:bg-paper-2"
         >
           {showQr ? "Hide QR code" : "Show QR code"}
@@ -59,7 +95,7 @@ export function ShareLinkBanner({ shareUrl }: { shareUrl: string }) {
       {copyError && <p className="mt-2 text-sm text-danger">{copyError}</p>}
 
       {showQr && (
-        <div className="mt-3 inline-block rounded-card bg-white p-3">
+        <div id={qrPanelId} className="mt-3 inline-block rounded-card bg-white p-3">
           {qrDataUrl && (
             // eslint-disable-next-line @next/next/no-img-element -- data: URL, generated client-side, no benefit from next/image's remote-fetch optimization pipeline
             <img
