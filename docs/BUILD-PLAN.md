@@ -56,6 +56,7 @@
 - [x] Copy link button on dashboard
 - [x] QR code generator (client-side `qrcode` package) for "stick on fridge"
 - [ ] **Post:** "Kitchen tablet test" — partner opens link
+- [x] **LinkedIn:** First-ever post for this project — Days 1–5 catch-up announcement + screenshots, published 2026-08-10
 
 ### Day 6 — Shutdown ritual (step 1–3)
 - [ ] Modal/wizard: capture loose thought → tomorrow top 3 → confirm tomorrow hours
