@@ -132,6 +132,7 @@ export function TimeSelect({
           id={listId}
           role="dialog"
           aria-label={`${label} picker`}
+          data-time-select-open="true"
           className="absolute left-0 top-[calc(100%+0.5rem)] z-20 flex w-60 flex-col gap-2 rounded-card border border-rule bg-paper p-2 shadow-lg"
         >
           <div className="flex gap-1">

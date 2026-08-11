@@ -6,6 +6,12 @@ import { getLocalDateString, validateScheduleTimes } from "@/lib/schedule";
 
 const DATE_RE = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
+function normalizePriority(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  return trimmed ? trimmed.slice(0, 120) : null;
+}
+
 export async function GET(request: NextRequest) {
   if (!isFirebaseAdminConfigured()) {
     return NextResponse.json(
@@ -108,18 +114,18 @@ export async function PUT(request: NextRequest) {
       workEnd: body.workEnd,
       lunchStart: body.lunchStart || null,
       lunchEnd: body.lunchEnd || null,
-      topPriority1: body.topPriority1 || null,
-      topPriority2: body.topPriority2 || null,
-      topPriority3: body.topPriority3 || null,
+      topPriority1: normalizePriority(body.topPriority1),
+      topPriority2: normalizePriority(body.topPriority2),
+      topPriority3: normalizePriority(body.topPriority3),
     },
     update: {
       workStart: body.workStart,
       workEnd: body.workEnd,
       lunchStart: body.lunchStart || null,
       lunchEnd: body.lunchEnd || null,
-      topPriority1: body.topPriority1 || null,
-      topPriority2: body.topPriority2 || null,
-      topPriority3: body.topPriority3 || null,
+      topPriority1: normalizePriority(body.topPriority1),
+      topPriority2: normalizePriority(body.topPriority2),
+      topPriority3: normalizePriority(body.topPriority3),
     },
   });
 

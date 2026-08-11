@@ -111,6 +111,9 @@ export type Schedule = {
   status: ScheduleStatusValue | null;
   statusUntil: string | null;
   statusMessage: string | null;
+  topPriority1: string | null;
+  topPriority2: string | null;
+  topPriority3: string | null;
 };
 
 export const STATUS_LABELS: Record<ScheduleStatusValue, string> = {

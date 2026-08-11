@@ -1,7 +1,7 @@
 /* Hallmark · app component · design-system: design.md · designed-as-app */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { TimeSelect } from "@/components/time-select";
 import {
@@ -27,16 +27,25 @@ export function ShutdownWizard({
   const [workEnd, setWorkEnd] = useState(todaySchedule?.workEnd ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    dialogRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      if (e.key !== "Escape") return;
+      if (saving) return;
+      if (document.querySelector("[data-time-select-open]")) return;
+      onClose();
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [onClose]);
+  }, [onClose, saving]);
 
   function handleBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
+    if (saving) return;
     if (e.target === e.currentTarget) onClose();
   }
 
@@ -90,9 +99,11 @@ export function ShutdownWizard({
       onClick={handleBackdropClick}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Shutdown ritual"
+        tabIndex={-1}
         className="w-full max-w-md rounded-card bg-paper p-6 shadow-lg"
       >
         {step === 0 && (
