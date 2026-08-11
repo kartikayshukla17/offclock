@@ -91,9 +91,20 @@ loose-thought textarea's content is never included in this request.
 
 If tomorrow's `DaySchedule` row already exists (e.g. the user re-opens
 the wizard and runs it again same evening), the upsert's `update` branch
-overwrites `workStart`/`workEnd`/`topPriority1-3` on that row but leaves
-`status`/`statusUntil`/`statusMessage`/lunch fields untouched — those
-aren't touched by this wizard at all.
+overwrites `workStart`/`workEnd`/`topPriority1-3` on that row and leaves
+`status`/`statusUntil`/`statusMessage` untouched — correction from an
+earlier draft of this spec: **lunch fields are NOT left untouched.**
+`PUT /api/schedule` has full-row-replace semantics for every field it
+accepts; since the wizard never sends `lunchStart`/`lunchEnd`, those get
+nulled on the target row just like an omitted `topPriority` does. This is
+currently unreachable in practice (the only UI that sets lunch,
+`DayScheduleForm`, always writes today's date, and nothing today can
+place a lunch window on a date the wizard later overwrites), but it's a
+real architectural constraint: **this endpoint now has two partial-update
+clients, and every field either one omits gets nulled.** That's fine
+while the two clients write disjoint dates. It stops being fine the
+moment a third writer (or a "plan any date" surface) is added — worth
+keeping in mind for Day 7 rather than something to fix now.
 
 ## Error handling
 

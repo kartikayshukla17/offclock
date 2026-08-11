@@ -571,7 +571,7 @@ git commit -m "feat: add shutdown ritual wizard (steps 1-3)"
 
 ## After this plan
 
-Before this ships for real, the controller (not a worktree implementer) must run `npm run db:push` from the main checkout, where real `DATABASE_URL` credentials exist, to actually push the `topPriority1/2/3` columns to the Neon database — schema.prisma and the generated client are not enough on their own.
+Task 1 already pushed the `topPriority1/2/3` columns to the live shared dev Neon database from within its worktree (real `.env.local` credentials were copied in for this branch — see the ledger). **Do not skip the next step because of that.** The main checkout's `node_modules/.prisma` client is generated separately and has zero knowledge of the new columns until it's regenerated there too — this is the same stale-client failure mode from a prior branch (Day 3). After merging, run `npx prisma generate` (or `npm run db:push`, now a DB no-op but which regenerates the client as a side effect) **from the main checkout** before running `tsc` there, or the typecheck will fail on `topPriority1` not existing on `DayScheduleCreateInput`.
 
 A human still needs to manually verify the full save flow with real credentials: step through the wizard, confirm tomorrow's hours actually land in tomorrow's `DaySchedule` row (via `GET /api/schedule?date=<tomorrow>` or by checking `npm run db:studio`), and confirm the loose-thought text never appears in any network request (check the browser's Network tab during step 1 → step 2 transition).
 
