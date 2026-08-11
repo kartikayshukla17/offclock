@@ -7,6 +7,7 @@ import { DashboardShell } from "@/components/dashboard-shell";
 import { useAuth } from "@/components/auth-provider";
 import { DayScheduleForm } from "@/components/day-schedule-form";
 import { StatusPanel } from "@/components/status-panel";
+import { ShutdownWizard } from "@/components/shutdown-wizard";
 import { getLocalDateString, type Schedule } from "@/lib/schedule";
 
 export default function DashboardPage() {
@@ -14,6 +15,7 @@ export default function DashboardPage() {
   const [schedule, setSchedule] = useState<Schedule | null>(null);
   const [scheduleLoading, setScheduleLoading] = useState(true);
   const [scheduleError, setScheduleError] = useState<string | null>(null);
+  const [showShutdownWizard, setShowShutdownWizard] = useState(false);
 
   // Single source of truth for "fetch schedule + apply it to state." Both
   // the mount effect below and the children (via the `onSaved` prop) call
@@ -63,59 +65,75 @@ export default function DashboardPage() {
   const shareHref = appUser?.slug ? `/s/${appUser.slug}` : null;
 
   return (
-    <DashboardShell>
-      <div className="space-y-6">
-        <div>
-          <h1 className="font-display text-2xl font-semibold tracking-tight">
-            Good {getGreeting()},{" "}
-            {appUser?.displayName?.split(" ")[0] ?? "there"}
-          </h1>
-          <p className="mt-2 text-ink-2">
-            Set today&apos;s hours and status below — your household reads
-            it from the share page.
-          </p>
-        </div>
+    <>
+      <DashboardShell>
+        <div className="space-y-6">
+          <div>
+            <h1 className="font-display text-2xl font-semibold tracking-tight">
+              Good {getGreeting()},{" "}
+              {appUser?.displayName?.split(" ")[0] ?? "there"}
+            </h1>
+            <p className="mt-2 text-ink-2">
+              Set today&apos;s hours and status below — your household reads
+              it from the share page.
+            </p>
+          </div>
 
-        {scheduleError && (
-          <p className="text-sm text-danger">{scheduleError}</p>
-        )}
+          {scheduleError && (
+            <p className="text-sm text-danger">{scheduleError}</p>
+          )}
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <DayScheduleForm
-            schedule={schedule}
-            loading={scheduleLoading}
-            onSaved={fetchSchedule}
-          />
-          <StatusPanel
-            schedule={schedule}
-            loading={scheduleLoading}
-            onSaved={fetchSchedule}
-          />
-          {shareHref ? (
-            <Link
-              href={shareHref}
-              className="rounded-card glass p-5 transition-transform duration-150 ease-out hover:scale-[1.01]"
+          <div className="grid gap-4 sm:grid-cols-2">
+            <DayScheduleForm
+              schedule={schedule}
+              loading={scheduleLoading}
+              onSaved={fetchSchedule}
+            />
+            <StatusPanel
+              schedule={schedule}
+              loading={scheduleLoading}
+              onSaved={fetchSchedule}
+            />
+            {shareHref ? (
+              <Link
+                href={shareHref}
+                className="rounded-card glass p-5 transition-transform duration-150 ease-out hover:scale-[1.01]"
+              >
+                <h2 className="font-display font-medium text-ink">
+                  Household page
+                </h2>
+                <p className="mt-2 text-sm text-ink-2">
+                  See exactly what they see — opens {shareHref}
+                </p>
+              </Link>
+            ) : (
+              <PlaceholderCard
+                title="Household page"
+                detail="Set up your link above to see it"
+              />
+            )}
+            <button
+              type="button"
+              onClick={() => setShowShutdownWizard(true)}
+              className="focus-ring rounded-card glass p-5 text-left transition-transform duration-150 ease-out hover:scale-[1.01]"
             >
               <h2 className="font-display font-medium text-ink">
-                Household page
+                Shutdown ritual
               </h2>
               <p className="mt-2 text-sm text-ink-2">
-                See exactly what they see — opens {shareHref}
+                Close out today and plan tomorrow
               </p>
-            </Link>
-          ) : (
-            <PlaceholderCard
-              title="Household page"
-              detail="Set up your link above to see it"
-            />
-          )}
-          <PlaceholderCard
-            title="Shutdown ritual"
-            detail="Off the clock flow — Day 6"
-          />
+            </button>
+          </div>
         </div>
-      </div>
-    </DashboardShell>
+      </DashboardShell>
+      {showShutdownWizard && (
+        <ShutdownWizard
+          todaySchedule={schedule}
+          onClose={() => setShowShutdownWizard(false)}
+        />
+      )}
+    </>
   );
 }
 
