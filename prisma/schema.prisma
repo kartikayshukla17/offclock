@@ -40,6 +40,9 @@ model DaySchedule {
   status        ScheduleStatus?
   statusUntil   String?         @map("status_until")
   statusMessage String?         @map("status_message")
+  topPriority1  String?         @map("top_priority_1")
+  topPriority2  String?         @map("top_priority_2")
+  topPriority3  String?         @map("top_priority_3")
   createdAt     DateTime        @default(now()) @map("created_at")
   updatedAt     DateTime        @updatedAt @map("updated_at")
 

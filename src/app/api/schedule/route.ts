@@ -68,6 +68,9 @@ export async function PUT(request: NextRequest) {
     workEnd?: string;
     lunchStart?: string;
     lunchEnd?: string;
+    topPriority1?: string;
+    topPriority2?: string;
+    topPriority3?: string;
   };
 
   if (typeof body.workStart !== "string" || typeof body.workEnd !== "string") {
@@ -105,12 +108,18 @@ export async function PUT(request: NextRequest) {
       workEnd: body.workEnd,
       lunchStart: body.lunchStart || null,
       lunchEnd: body.lunchEnd || null,
+      topPriority1: body.topPriority1 || null,
+      topPriority2: body.topPriority2 || null,
+      topPriority3: body.topPriority3 || null,
     },
     update: {
       workStart: body.workStart,
       workEnd: body.workEnd,
       lunchStart: body.lunchStart || null,
       lunchEnd: body.lunchEnd || null,
+      topPriority1: body.topPriority1 || null,
+      topPriority2: body.topPriority2 || null,
+      topPriority3: body.topPriority3 || null,
     },
   });
 
