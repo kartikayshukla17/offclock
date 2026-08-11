@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-08-11",
+    "scope": "app",
+    "type": "amendment",
+    "macrostructure": "unchanged (Letter + no-macrostructure app pages + zero-chrome content page)",
+    "theme": "custom",
+    "theme_axes": "light / geometric-sans / chromatic-teal (unchanged)",
+    "vibe": "same palette + macrostructure — typography and elevation refined toward a more premium feel",
+    "enrichment": "unchanged (Tier-A CSS art, share page backdrop only)",
+    "brief": "OffClock · design.md amendment · body font Geist -> Plus Jakarta Sans, added --shadow-sm/md/lg elevation scale on .glass"
+  },
+  {
     "date": "2026-08-08",
     "scope": "app",
     "macrostructure": "Letter (marketing) + no-macrostructure app pages + zero-chrome content page",

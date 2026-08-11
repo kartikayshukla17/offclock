@@ -35,6 +35,10 @@
 
   --text-display: var(--text-display);
   --text-display-s: var(--text-display-s);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
 }
 
 html,
@@ -54,6 +58,7 @@ body {
   border: 1px solid var(--color-glass-border);
   backdrop-filter: blur(var(--blur-glass)) saturate(140%);
   -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(140%);
+  box-shadow: var(--shadow-md);
 }
 
 /* Hallmark · focus ring — outline-based per interaction-and-states gate 39,

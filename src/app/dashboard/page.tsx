@@ -97,7 +97,7 @@ export default function DashboardPage() {
             {shareHref ? (
               <Link
                 href={shareHref}
-                className="rounded-card glass p-5 transition-transform duration-150 ease-out hover:scale-[1.01]"
+                className="rounded-card glass p-5 transition-[transform,box-shadow] duration-150 ease-out hover:scale-[1.01] hover:shadow-lg"
               >
                 <h2 className="font-display font-medium text-ink">
                   Household page
@@ -116,7 +116,7 @@ export default function DashboardPage() {
               type="button"
               onClick={() => setShowShutdownWizard(true)}
               disabled={scheduleLoading}
-              className="focus-ring rounded-card glass p-5 text-left transition-transform duration-150 ease-out hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-55"
+              className="focus-ring rounded-card glass p-5 text-left transition-[transform,box-shadow] duration-150 ease-out hover:scale-[1.01] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-55"
             >
               <h2 className="font-display font-medium text-ink">
                 Shutdown ritual

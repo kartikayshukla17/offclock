@@ -39,15 +39,36 @@ a new hue.
 Axes: **light / geometric-sans / chromatic-teal (~195°)**.
 
 ## Typography
-- Display: Bricolage Grotesque, weight 500/700, style normal (new — matches
-  the "Soft" tone-pairing's free row)
-- Body: Geist, weight 400/500 (already installed via `next/font` — this
-  redesign also fixes a pre-existing bug where `body` hard-coded
-  `font-family: Arial, Helvetica, sans-serif` instead of using it)
+- Display: Bricolage Grotesque, weight 500/700, style normal (matches the
+  "Soft" tone-pairing's free row)
+- Body: Plus Jakarta Sans, variable weight via `next/font` (amended from
+  Geist — a warmer, rounded humanist face pairs better with a distinctive
+  display face than a second neutral-geometric sans did; also the exact
+  face hallmark's own playful-genre "Hum" theme uses for this role,
+  independently corroborated by ui-ux-pro-max's SaaS-scoped font-pairing
+  data)
 - Mono: Geist Mono, weight 400 (already installed — used for time values like
   `09:00–17:00`)
 - Display tracking: -0.01em
 - Type scale anchor: `--text-display` = clamp(2.25rem, 5vw + 1rem, 3.5rem)
+
+## Elevation
+Every `.glass` surface carries a resting shadow (`--shadow-md`) — soft,
+two-layer, tinted at hue 195 (the same hue as `--color-ink`/`--color-accent`,
+so it reads as brand-consistent depth rather than generic drop-shadow black).
+This is a deliberate addition: flat glass + a hairline border alone reads as
+templated at this app's scale; genuine elevation is what separates a
+considered surface from a flat one.
+
+- `--shadow-sm` — nav pills, small chips
+- `--shadow-md` — default resting state for every `.glass` card/panel
+- `--shadow-lg` — hover-lift on interactive glass cards (paired with the
+  existing `hover:scale-[1.01]`), and the resting shadow for solid `bg-paper`
+  overlays (the shutdown wizard modal, the `TimeSelect` popover) that were
+  already using a bare Tailwind `shadow-lg` utility — registering these
+  tokens under Tailwind's `--shadow-*` theme namespace means those existing
+  utility classes now resolve to the tinted values automatically, with no
+  component edits required.
 
 ## Spacing
 4-point named scale, values in `tokens.css`. Pages use named tokens
@@ -118,7 +139,7 @@ Axes: **light / geometric-sans / chromatic-teal (~195°)**.
   --color-danger-bg:     oklch(95% 0.03 25);
 
   --font-display: "Bricolage Grotesque", ui-sans-serif, sans-serif;
-  --font-body:    var(--font-geist-sans), ui-sans-serif, sans-serif;
+  --font-body:    var(--font-plus-jakarta-sans), ui-sans-serif, sans-serif;
   --font-mono:    var(--font-geist-mono), ui-monospace, monospace;
 
   --space-3xs: 0.25rem;  --space-2xs: 0.5rem;  --space-xs: 0.75rem;
@@ -137,6 +158,16 @@ Axes: **light / geometric-sans / chromatic-teal (~195°)**.
   --radius-card: 1.25rem; --radius-pill: 999px; --radius-input: 0.75rem;
 
   --blur-glass: 20px;
+
+  --shadow-sm:
+    0 1px 2px oklch(20% 0.02 195 / 0.06),
+    0 1px 1px oklch(20% 0.02 195 / 0.04);
+  --shadow-md:
+    0 8px 24px oklch(20% 0.03 195 / 0.10),
+    0 2px 6px oklch(20% 0.02 195 / 0.06);
+  --shadow-lg:
+    0 16px 40px oklch(20% 0.04 195 / 0.14),
+    0 4px 10px oklch(20% 0.02 195 / 0.08);
 }
 ```
 
