@@ -115,7 +115,8 @@ export default function DashboardPage() {
             <button
               type="button"
               onClick={() => setShowShutdownWizard(true)}
-              className="focus-ring rounded-card glass p-5 text-left transition-transform duration-150 ease-out hover:scale-[1.01]"
+              disabled={scheduleLoading}
+              className="focus-ring rounded-card glass p-5 text-left transition-transform duration-150 ease-out hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-55"
             >
               <h2 className="font-display font-medium text-ink">
                 Shutdown ritual

@@ -114,6 +114,7 @@ export function ShutdownWizard({
               onClose={onClose}
               onNext={() => setStep(1)}
               nextLabel="Next"
+              saving={saving}
             />
           </>
         )}
@@ -151,6 +152,7 @@ export function ShutdownWizard({
               onBack={() => setStep(0)}
               onNext={() => setStep(2)}
               nextLabel="Next"
+              saving={saving}
             />
           </>
         )}
@@ -192,6 +194,7 @@ export function ShutdownWizard({
               onNext={handleConfirm}
               nextLabel={saving ? "Saving…" : "Confirm"}
               nextDisabled={saving}
+              saving={saving}
             />
           </>
         )}
@@ -206,19 +209,22 @@ function WizardFooter({
   onNext,
   nextLabel,
   nextDisabled,
+  saving,
 }: {
   onClose: () => void;
   onBack?: () => void;
   onNext: () => void;
   nextLabel: string;
   nextDisabled?: boolean;
+  saving?: boolean;
 }) {
   return (
     <div className="mt-6 flex items-center justify-between">
       <button
         type="button"
         onClick={onClose}
-        className="focus-ring rounded-pill px-3 py-1.5 text-sm font-medium text-ink-2 transition-colors duration-150 ease-out hover:bg-paper-2"
+        disabled={saving}
+        className="focus-ring rounded-pill px-3 py-1.5 text-sm font-medium text-ink-2 transition-colors duration-150 ease-out hover:bg-paper-2 disabled:cursor-not-allowed disabled:opacity-55"
       >
         Cancel
       </button>
@@ -227,7 +233,8 @@ function WizardFooter({
           <button
             type="button"
             onClick={onBack}
-            className="focus-ring rounded-pill border border-rule px-3 py-1.5 text-sm font-medium text-ink-2 transition-colors duration-150 ease-out hover:bg-paper-2"
+            disabled={saving}
+            className="focus-ring rounded-pill border border-rule px-3 py-1.5 text-sm font-medium text-ink-2 transition-colors duration-150 ease-out hover:bg-paper-2 disabled:cursor-not-allowed disabled:opacity-55"
           >
             Back
           </button>
