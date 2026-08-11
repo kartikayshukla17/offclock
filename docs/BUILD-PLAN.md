@@ -59,7 +59,7 @@
 - [x] **LinkedIn:** First-ever post for this project — Days 1–5 catch-up announcement + screenshots, published 2026-08-10
 
 ### Day 6 — Shutdown ritual (step 1–3)
-- [ ] Modal/wizard: capture loose thought → tomorrow top 3 → confirm tomorrow hours
+- [x] Modal/wizard: capture loose thought → tomorrow top 3 → confirm tomorrow hours
 - [ ] **Post:** Cal Newport shutdown angle (human, not preachy)
 
 ### Day 7 — Shutdown complete
