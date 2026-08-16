@@ -516,6 +516,8 @@ git commit -m "feat: add default-hours checkbox and Apply-to-today button"
 
 ## After this plan
 
+Task 1 already pushed `defaultWorkStart`/`defaultWorkEnd` to the live shared dev Neon database from within its worktree (real `.env.local` credentials were copied in for this branch — see the ledger). **Do not skip the next step because of that.** The main checkout's `node_modules/.prisma` client is generated separately and has zero knowledge of the new columns until it's regenerated there too — this is the same stale-client failure mode from prior branches (Day 3, and again on Day 6). After merging, run `npx prisma generate` (or `npm run db:push`, now a DB no-op but which regenerates the client as a side effect) **from the main checkout** before running `tsc` there, or the typecheck will fail on `defaultWorkStart` not existing on `UserUpdateInput`.
+
 A human still needs to manually verify: save today's hours with "Use as my default Mon–Fri hours" checked, confirm the checkbox resets to unchecked afterward and `GET /api/profile` shows the new `defaultWorkStart`/`defaultWorkEnd`; reload the dashboard and confirm the "Apply my usual hours (…)" button appears with the correct times; on a different day (or after clearing today's schedule), click it and confirm today's hours update to the default and lunch is left untouched.
 
 Day 9 (landing page) is the next code task after this plan lands, per `docs/BUILD-PLAN.md`.
