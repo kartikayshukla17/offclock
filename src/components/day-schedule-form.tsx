@@ -247,6 +247,7 @@ export function DayScheduleForm({
           type="checkbox"
           checked={useAsDefault}
           onChange={(e) => setUseAsDefault(e.target.checked)}
+          disabled={saving}
           className="h-4 w-4 accent-accent"
         />
         Use as my default Mon–Fri hours

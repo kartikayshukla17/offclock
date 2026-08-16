@@ -123,9 +123,15 @@ export async function PUT(request: NextRequest) {
       workEnd: body.workEnd,
       lunchStart: body.lunchStart || null,
       lunchEnd: body.lunchEnd || null,
-      topPriority1: normalizePriority(body.topPriority1),
-      topPriority2: normalizePriority(body.topPriority2),
-      topPriority3: normalizePriority(body.topPriority3),
+      ...(body.topPriority1 !== undefined
+        ? { topPriority1: normalizePriority(body.topPriority1) }
+        : {}),
+      ...(body.topPriority2 !== undefined
+        ? { topPriority2: normalizePriority(body.topPriority2) }
+        : {}),
+      ...(body.topPriority3 !== undefined
+        ? { topPriority3: normalizePriority(body.topPriority3) }
+        : {}),
     },
   });
 

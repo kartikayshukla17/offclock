@@ -78,9 +78,9 @@ export function ShutdownWizard({
           date: getTomorrowDateString(),
           workStart,
           workEnd,
-          topPriority1: priority1 || undefined,
-          topPriority2: priority2 || undefined,
-          topPriority3: priority3 || undefined,
+          topPriority1: priority1,
+          topPriority2: priority2,
+          topPriority3: priority3,
         }),
       });
       const data = (await res.json()) as { error?: string };
