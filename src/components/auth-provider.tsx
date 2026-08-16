@@ -25,6 +25,8 @@ export type AppUser = {
   email: string;
   displayName: string | null;
   slug: string | null;
+  defaultWorkStart: string | null;
+  defaultWorkEnd: string | null;
 };
 
 type AuthContextValue = {

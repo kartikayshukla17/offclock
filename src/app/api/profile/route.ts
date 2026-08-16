@@ -3,6 +3,7 @@ import { getAuthUserFromRequest } from "@/lib/auth/request";
 import { isFirebaseAdminConfigured } from "@/lib/firebase/admin";
 import { prisma } from "@/lib/prisma";
 import { normalizeSlug, validateSlug } from "@/lib/slug";
+import { validateScheduleTimes } from "@/lib/schedule";
 
 export async function GET(request: NextRequest) {
   if (!isFirebaseAdminConfigured()) {
@@ -44,9 +45,16 @@ export async function PATCH(request: NextRequest) {
   const body = (await request.json()) as {
     displayName?: string;
     slug?: string;
+    defaultWorkStart?: string;
+    defaultWorkEnd?: string;
   };
 
-  const data: { displayName?: string; slug?: string } = {};
+  const data: {
+    displayName?: string;
+    slug?: string;
+    defaultWorkStart?: string;
+    defaultWorkEnd?: string;
+  } = {};
 
   if (typeof body.displayName === "string") {
     const name = body.displayName.trim();
@@ -73,6 +81,30 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "That slug is taken." }, { status: 409 });
     }
     data.slug = slug;
+  }
+
+  if (body.defaultWorkStart !== undefined || body.defaultWorkEnd !== undefined) {
+    if (
+      typeof body.defaultWorkStart !== "string" ||
+      typeof body.defaultWorkEnd !== "string"
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "defaultWorkStart and defaultWorkEnd must both be provided together.",
+        },
+        { status: 400 },
+      );
+    }
+    const templateError = validateScheduleTimes({
+      workStart: body.defaultWorkStart,
+      workEnd: body.defaultWorkEnd,
+    });
+    if (templateError) {
+      return NextResponse.json({ error: templateError }, { status: 400 });
+    }
+    data.defaultWorkStart = body.defaultWorkStart;
+    data.defaultWorkEnd = body.defaultWorkEnd;
   }
 
   if (Object.keys(data).length === 0) {
