@@ -101,6 +101,7 @@ export async function PATCH(request: NextRequest) {
       status: body.status as ScheduleStatusValue,
       statusUntil: body.statusUntil || null,
       statusMessage: body.statusMessage?.trim() || null,
+      ...(body.status === "off_clock" ? { shutdownAt: new Date() } : {}),
     },
   });
 

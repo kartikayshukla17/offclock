@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { TimeSelect } from "@/components/time-select";
 import {
+  getLocalDateString,
   getTomorrowDateString,
   validateScheduleTimes,
   type Schedule,
@@ -13,9 +14,11 @@ import {
 export function ShutdownWizard({
   todaySchedule,
   onClose,
+  onShutdownComplete,
 }: {
   todaySchedule: Schedule | null;
   onClose: () => void;
+  onShutdownComplete: () => void;
 }) {
   const { getIdToken } = useAuth();
   const [step, setStep] = useState(0);
@@ -85,6 +88,40 @@ export function ShutdownWizard({
         setError(data.error ?? "Could not save tomorrow's plan.");
         return;
       }
+      setStep(3);
+    } catch {
+      setError("Couldn't save — check your connection and try again.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleCompleteShutdown() {
+    setError(null);
+    setSaving(true);
+    try {
+      const token = await getIdToken();
+      if (!token) {
+        setError("You're signed out — refresh and sign in again.");
+        return;
+      }
+      const res = await fetch("/api/schedule/status", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          date: getLocalDateString(),
+          status: "off_clock",
+        }),
+      });
+      const data = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        setError(data.error ?? "Could not complete shutdown.");
+        return;
+      }
+      onShutdownComplete();
       onClose();
     } catch {
       setError("Couldn't save — check your connection and try again.");
@@ -209,6 +246,27 @@ export function ShutdownWizard({
             />
           </>
         )}
+
+        {step === 3 && (
+          <>
+            <h2 className="font-display text-lg font-semibold text-ink">
+              Tomorrow&apos;s plan is set
+            </h2>
+            <p className="mt-1 text-sm text-ink-2">
+              One more thing — mark yourself off the clock so your household
+              knows you&apos;re done for today.
+            </p>
+            {error && <p className="mt-3 text-sm text-danger">{error}</p>}
+            <WizardFooter
+              onClose={onClose}
+              closeLabel="Not yet"
+              onNext={handleCompleteShutdown}
+              nextLabel={saving ? "Saving…" : "Complete shutdown"}
+              nextDisabled={saving}
+              saving={saving}
+            />
+          </>
+        )}
       </div>
     </div>
   );
@@ -216,6 +274,7 @@ export function ShutdownWizard({
 
 function WizardFooter({
   onClose,
+  closeLabel = "Cancel",
   onBack,
   onNext,
   nextLabel,
@@ -223,6 +282,7 @@ function WizardFooter({
   saving,
 }: {
   onClose: () => void;
+  closeLabel?: string;
   onBack?: () => void;
   onNext: () => void;
   nextLabel: string;
@@ -237,7 +297,7 @@ function WizardFooter({
         disabled={saving}
         className="focus-ring rounded-pill px-3 py-1.5 text-sm font-medium text-ink-2 transition-colors duration-150 ease-out hover:bg-paper-2 disabled:cursor-not-allowed disabled:opacity-55"
       >
-        Cancel
+        {closeLabel}
       </button>
       <div className="flex gap-2">
         {onBack && (

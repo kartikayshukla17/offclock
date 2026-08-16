@@ -114,6 +114,7 @@ export type Schedule = {
   topPriority1: string | null;
   topPriority2: string | null;
   topPriority3: string | null;
+  shutdownAt: string | null;
 };
 
 export const STATUS_LABELS: Record<ScheduleStatusValue, string> = {

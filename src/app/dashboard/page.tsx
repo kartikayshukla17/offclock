@@ -132,6 +132,7 @@ export default function DashboardPage() {
         <ShutdownWizard
           todaySchedule={schedule}
           onClose={() => setShowShutdownWizard(false)}
+          onShutdownComplete={fetchSchedule}
         />
       )}
     </>
