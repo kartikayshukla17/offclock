@@ -68,8 +68,8 @@
 - [ ] **Post:** Week 1 recap GIF (toggle status → share page updates)
 
 ### Day 8 — Recurring schedule (Pro preview)
-- [ ] Default weekly template (Mon–Fri 9–6) — stored on user
-- [ ] "Apply to today" one tap
+- [x] Default weekly template (Mon–Fri 9–6) — stored on user
+- [x] "Apply to today" one tap
 - [ ] **Post:** LinkedIn week 1 story
 
 ### Day 9 — Landing page
