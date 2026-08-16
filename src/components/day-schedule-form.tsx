@@ -15,7 +15,7 @@ export function DayScheduleForm({
   loading: boolean;
   onSaved: () => void;
 }) {
-  const { getIdToken } = useAuth();
+  const { getIdToken, appUser, refreshProfile } = useAuth();
   const [workStart, setWorkStart] = useState(schedule?.workStart ?? "");
   const [workEnd, setWorkEnd] = useState(schedule?.workEnd ?? "");
   const [hasLunch, setHasLunch] = useState(
@@ -27,6 +27,7 @@ export function DayScheduleForm({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  const [useAsDefault, setUseAsDefault] = useState(false);
 
   // Seed local fields from `schedule` exactly once, the first time it
   // arrives non-null (the parent's initial fetch completing). After that,
@@ -41,6 +42,61 @@ export function DayScheduleForm({
     setHasLunch(Boolean(schedule.lunchStart && schedule.lunchEnd));
     setLunchStart(schedule.lunchStart ?? "");
     setLunchEnd(schedule.lunchEnd ?? "");
+  }
+
+  async function putSchedule(
+    start: string,
+    end: string,
+    lunch: { start: string; end: string } | null,
+  ): Promise<boolean> {
+    const token = await getIdToken();
+    if (!token) {
+      setError("You're signed out — refresh and sign in again.");
+      return false;
+    }
+    const res = await fetch("/api/schedule", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        date: getLocalDateString(),
+        workStart: start,
+        workEnd: end,
+        lunchStart: lunch?.start,
+        lunchEnd: lunch?.end,
+      }),
+    });
+    const data = (await res.json()) as { error?: string };
+    if (!res.ok) {
+      setError(data.error ?? "Could not save schedule.");
+      return false;
+    }
+    return true;
+  }
+
+  async function patchDefaultTemplate(start: string, end: string): Promise<boolean> {
+    const token = await getIdToken();
+    if (!token) {
+      setError("You're signed out — refresh and sign in again.");
+      return false;
+    }
+    const res = await fetch("/api/profile", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ defaultWorkStart: start, defaultWorkEnd: end }),
+    });
+    const data = (await res.json()) as { error?: string };
+    if (!res.ok) {
+      setError(data.error ?? "Could not save your default hours.");
+      return false;
+    }
+    await refreshProfile();
+    return true;
   }
 
   async function handleSave() {
@@ -65,30 +121,40 @@ export function DayScheduleForm({
 
     setSaving(true);
     try {
-      const token = await getIdToken();
-      if (!token) {
-        setError("You're signed out — refresh and sign in again.");
-        return;
+      const ok = await putSchedule(
+        workStart,
+        workEnd,
+        hasLunch ? { start: lunchStart, end: lunchEnd } : null,
+      );
+      if (!ok) return;
+      if (useAsDefault) {
+        const defaultOk = await patchDefaultTemplate(workStart, workEnd);
+        if (!defaultOk) return;
+        setUseAsDefault(false);
       }
-      const res = await fetch("/api/schedule", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          date: getLocalDateString(),
-          workStart,
-          workEnd,
-          lunchStart: hasLunch ? lunchStart : undefined,
-          lunchEnd: hasLunch ? lunchEnd : undefined,
-        }),
-      });
-      const data = (await res.json()) as { error?: string };
-      if (!res.ok) {
-        setError(data.error ?? "Could not save schedule.");
-        return;
-      }
+      setSaved(true);
+      onSaved();
+    } catch {
+      setError("Couldn't save — check your connection and try again.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleApplyDefault() {
+    if (!appUser?.defaultWorkStart || !appUser?.defaultWorkEnd) return;
+    setError(null);
+    setSaved(false);
+    setSaving(true);
+    try {
+      const ok = await putSchedule(
+        appUser.defaultWorkStart,
+        appUser.defaultWorkEnd,
+        hasLunch ? { start: lunchStart, end: lunchEnd } : null,
+      );
+      if (!ok) return;
+      setWorkStart(appUser.defaultWorkStart);
+      setWorkEnd(appUser.defaultWorkEnd);
       setSaved(true);
       onSaved();
     } catch {
@@ -114,6 +180,21 @@ export function DayScheduleForm({
       <h2 className="font-display font-medium text-ink">
         Today&apos;s schedule
       </h2>
+
+      {appUser?.defaultWorkStart && appUser?.defaultWorkEnd && (
+        <button
+          type="button"
+          onClick={handleApplyDefault}
+          disabled={saving}
+          className="focus-ring mt-2 rounded-pill border border-rule px-3 py-1.5 text-sm font-medium text-ink-2 transition-colors duration-150 ease-out hover:bg-paper-2 disabled:cursor-not-allowed disabled:opacity-55"
+        >
+          Apply my usual hours (
+          <span className="font-mono">
+            {appUser.defaultWorkStart}–{appUser.defaultWorkEnd}
+          </span>
+          )
+        </button>
+      )}
 
       <div className="mt-4 flex items-start gap-3">
         <div className="flex flex-1 flex-col text-sm text-ink-2">
@@ -160,6 +241,16 @@ export function DayScheduleForm({
           </div>
         </div>
       )}
+
+      <label className="mt-4 flex items-center gap-2 text-sm text-ink-2">
+        <input
+          type="checkbox"
+          checked={useAsDefault}
+          onChange={(e) => setUseAsDefault(e.target.checked)}
+          className="h-4 w-4 accent-accent"
+        />
+        Use as my default Mon–Fri hours
+      </label>
 
       {error && <p className="mt-3 text-sm text-danger">{error}</p>}
       {saved && !error && (
