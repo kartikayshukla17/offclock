@@ -63,8 +63,8 @@
 - [ ] **Post:** Cal Newport shutdown angle (human, not preachy)
 
 ### Day 7 — Shutdown complete
-- [ ] Final step: "Off the clock" → status `off_clock`, hide meeting blocks
-- [ ] Shutdown timestamp logged
+- [x] Final step: "Off the clock" → status `off_clock`, hide meeting blocks
+- [x] Shutdown timestamp logged
 - [ ] **Post:** Week 1 recap GIF (toggle status → share page updates)
 
 ### Day 8 — Recurring schedule (Pro preview)
