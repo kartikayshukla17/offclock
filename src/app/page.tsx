@@ -30,7 +30,10 @@ export default function HomePage() {
           <p>
             Your family can&apos;t see the red dot on Slack. So you get walked
             in on mid-call, or you&apos;re &ldquo;still working&rdquo; at 9pm
-            because nothing marked the actual end of the day.
+            because nothing marked the actual end of the day. There&apos;s no
+            commute anymore either — no ten minutes in the car where
+            &ldquo;work&rdquo; visibly ends and &ldquo;home&rdquo; visibly
+            starts.
           </p>
           <p>
             I built OffClock to fix that with one link. It shows your
@@ -60,7 +63,10 @@ export default function HomePage() {
         </figure>
 
         <div className="mt-14 space-y-1 text-lg leading-relaxed text-ink-2">
-          <p>Still building. Status and hours are live — shutdown ritual is next.</p>
+          <p>
+            Still building. Status, hours, shutdown ritual, recurring
+            schedule — all live now.
+          </p>
           <p>— Kartikay</p>
         </div>
 
@@ -69,7 +75,7 @@ export default function HomePage() {
             href="/login"
             className="text-base font-medium text-accent focus-ring rounded underline decoration-2 underline-offset-2 hover:text-ink"
           >
-            p.s. get your own link →
+            p.s. it&apos;s free — get your own link →
           </Link>
         </p>
       </main>
