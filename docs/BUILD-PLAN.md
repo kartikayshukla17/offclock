@@ -73,9 +73,9 @@
 - [ ] **Post:** LinkedIn week 1 story
 
 ### Day 9 — Landing page
-- [ ] Hero: one-liner + demo screenshot + "Get free link"
-- [ ] 3 pain bullets (interruptions, Slack invisible to family, no commute)
-- [ ] **Post:** Landing page link (soft launch)
+- [x] Hero: personal-letter open + demo mockup + free-link CTA (text link, not a button — deliberate Letter-macrostructure choice, see design.md)
+- [x] 3 pain points (interruptions, Slack invisible to family, no commute) — woven into prose, not literal bullets, per the Letter voice
+- [ ] **Post:** Landing page link (soft launch) — blocked on an actual deploy; still localhost-only
 
 ### Day 10 — Stripe + Pro tier
 - [ ] Pro $6/mo: recurring schedule, custom footer message, shutdown streak
