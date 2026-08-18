@@ -97,11 +97,14 @@ export default function DashboardPage() {
             {shareHref ? (
               <Link
                 href={shareHref}
-                className="rounded-card glass p-5 transition-[transform,box-shadow] duration-150 ease-out hover:scale-[1.01] hover:shadow-lg"
+                className="group rounded-card glass p-5 transition-[transform,box-shadow] duration-150 ease-out hover:scale-[1.01] hover:shadow-lg"
               >
-                <h2 className="font-display font-medium text-ink">
-                  Household page
-                </h2>
+                <div className="flex items-center justify-between gap-2">
+                  <h2 className="font-display font-medium text-ink">
+                    Household page
+                  </h2>
+                  <ChevronIcon />
+                </div>
                 <p className="mt-2 text-sm text-ink-2">
                   See exactly what they see — opens {shareHref}
                 </p>
@@ -116,11 +119,14 @@ export default function DashboardPage() {
               type="button"
               onClick={() => setShowShutdownWizard(true)}
               disabled={scheduleLoading}
-              className="focus-ring rounded-card glass p-5 text-left transition-[transform,box-shadow] duration-150 ease-out hover:scale-[1.01] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-55"
+              className="group focus-ring rounded-card glass p-5 text-left transition-[transform,box-shadow] duration-150 ease-out hover:scale-[1.01] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-55"
             >
-              <h2 className="font-display font-medium text-ink">
-                Shutdown ritual
-              </h2>
+              <div className="flex items-center justify-between gap-2">
+                <h2 className="font-display font-medium text-ink">
+                  Shutdown ritual
+                </h2>
+                <ChevronIcon />
+              </div>
               <p className="mt-2 text-sm text-ink-2">
                 Close out today and plan tomorrow
               </p>
@@ -151,6 +157,27 @@ function PlaceholderCard({
       <h2 className="font-display font-medium text-ink-2">{title}</h2>
       <p className="mt-2 text-sm text-muted">{detail}</p>
     </div>
+  );
+}
+
+function ChevronIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+      className="shrink-0 text-muted transition-transform duration-150 ease-out group-hover:translate-x-0.5"
+    >
+      <path
+        d="M7.5 5l5 5-5 5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
