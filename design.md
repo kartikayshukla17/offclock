@@ -20,9 +20,16 @@ and soft-but-contrasty color were explicitly requested.
 Custom, tuned. Anchored on the app's existing brand teal rather than inventing
 a new hue.
 
-- `--color-paper`      oklch(97% 0.012 85)
-- `--color-paper-2`    oklch(94% 0.014 85)
-- `--color-paper-3`    oklch(90% 0.016 85)
+Paper hue amended from 85° to 60° (chroma nudged up slightly, lightness
+unchanged) — the impeccable design-audit tool independently flagged the
+original hue as the generic "cream/beige AI default," a real risk category
+even though it was a deliberate pick originally. Lightness stayed put
+specifically to avoid re-opening the contrast-safety margins the original
+58-gate slop-test pass already tuned against text on this surface.
+
+- `--color-paper`      oklch(97% 0.018 60)
+- `--color-paper-2`    oklch(94% 0.02 60)
+- `--color-paper-3`    oklch(90% 0.022 60)
 - `--color-ink`        oklch(20% 0.012 195)
 - `--color-ink-2`      oklch(38% 0.012 195)
 - `--color-rule`       oklch(80% 0.014 195)
@@ -31,7 +38,7 @@ a new hue.
 - `--color-accent`     oklch(62% 0.13 195)
 - `--color-accent-ink` oklch(18% 0.03 195)
 - `--color-focus`      oklch(60% 0.20 195)
-- `--color-glass`      oklch(98% 0.010 85 / 0.55)
+- `--color-glass`      oklch(98% 0.016 60 / 0.55)
 - `--color-glass-border` oklch(100% 0 0 / 0.45)
 - `--color-danger`     oklch(55% 0.18 25)
 - `--color-danger-bg`  oklch(95% 0.03 25)
@@ -122,9 +129,9 @@ considered surface from a flat one.
 ### tokens.css
 ```css
 :root {
-  --color-paper:        oklch(97% 0.012 85);
-  --color-paper-2:       oklch(94% 0.014 85);
-  --color-paper-3:       oklch(90% 0.016 85);
+  --color-paper:        oklch(97% 0.018 60);
+  --color-paper-2:       oklch(94% 0.02 60);
+  --color-paper-3:       oklch(90% 0.022 60);
   --color-ink:           oklch(20% 0.012 195);
   --color-ink-2:         oklch(38% 0.012 195);
   --color-rule:          oklch(80% 0.014 195);
@@ -133,7 +140,7 @@ considered surface from a flat one.
   --color-accent:        oklch(62% 0.13 195);
   --color-accent-ink:    oklch(18% 0.03 195);
   --color-focus:         oklch(60% 0.20 195);
-  --color-glass:         oklch(98% 0.010 85 / 0.55);
+  --color-glass:         oklch(98% 0.016 60 / 0.55);
   --color-glass-border:  oklch(100% 0 0 / 0.45);
   --color-danger:        oklch(55% 0.18 25);
   --color-danger-bg:     oklch(95% 0.03 25);

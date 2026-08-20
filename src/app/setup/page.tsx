@@ -1,11 +1,11 @@
 /* Hallmark · app page · design-system: design.md · designed-as-app */
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { useAuth } from "@/components/auth-provider";
-import { normalizeSlug } from "@/lib/slug";
+import { normalizeSlug, validateSlug } from "@/lib/slug";
 
 export default function SetupPage() {
   const router = useRouter();
@@ -15,12 +15,48 @@ export default function SetupPage() {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [syncedAppUser, setSyncedAppUser] = useState(appUser);
+  const [slugAvailable, setSlugAvailable] = useState<boolean | null>(null);
+  const [checkedSlug, setCheckedSlug] = useState<string | null>(null);
+  const [checkingSlug, setCheckingSlug] = useState(false);
+  const slugCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   if (appUser !== syncedAppUser) {
     setSyncedAppUser(appUser);
     setDisplayName(appUser?.displayName ?? "");
     setSlug(appUser?.slug ?? "");
   }
+
+  useEffect(() => {
+    if (slugCheckTimeout.current) clearTimeout(slugCheckTimeout.current);
+
+    if (!slug || slug === appUser?.slug || validateSlug(slug)) {
+      return;
+    }
+
+    slugCheckTimeout.current = setTimeout(async () => {
+      setCheckingSlug(true);
+      try {
+        const token = await getIdToken();
+        if (!token) return;
+        const res = await fetch(
+          `/api/profile/slug-check?slug=${encodeURIComponent(slug)}`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+        if (!res.ok) return;
+        const data = (await res.json()) as { available: boolean };
+        setSlugAvailable(data.available);
+        setCheckedSlug(slug);
+      } catch {
+        // Silent — the submit-time check still catches a taken slug.
+      } finally {
+        setCheckingSlug(false);
+      }
+    }, 400);
+
+    return () => {
+      if (slugCheckTimeout.current) clearTimeout(slugCheckTimeout.current);
+    };
+  }, [slug, appUser?.slug, getIdToken]);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -95,7 +131,7 @@ export default function SetupPage() {
                   setSlug(
                     e.target.value
                       .toLowerCase()
-                      .replace(/[^a-z0-9-]/g, "")
+                      .replace(/[^a-z0-9-]/g, "-")
                       .replace(/-+/g, "-"),
                   )
                 }
@@ -105,8 +141,28 @@ export default function SetupPage() {
               />
             </div>
             <span className="mt-1 block text-xs text-muted">
-              Lowercase letters, numbers, hyphens — e.g. kartikay-household
+              We clean this up as you type — lowercase letters, numbers, and
+              hyphens only.
             </span>
+            {slug && slug !== appUser?.slug && !validateSlug(slug) && (
+              <span
+                className={`mt-1 block text-xs ${
+                  checkingSlug
+                    ? "text-muted"
+                    : checkedSlug === slug && slugAvailable
+                      ? "text-ink-2"
+                      : "text-danger"
+                }`}
+              >
+                {checkingSlug
+                  ? "Checking…"
+                  : checkedSlug === slug
+                    ? slugAvailable
+                      ? "Available"
+                      : "Already taken"
+                    : ""}
+              </span>
+            )}
           </label>
 
           <button

@@ -1,5 +1,5 @@
 /* Hallmark · macrostructure: Letter · H12 hero knobs: salutation=direct-address, body=2 paragraphs, signoff=first-name
- * theme: custom · vibe: "soft glass, warm neutral base, vivid teal anchor" · paper: oklch(97% 0.012 85) · accent: oklch(62% 0.13 195)
+ * theme: custom · vibe: "soft glass, warm neutral base, vivid teal anchor" · paper: oklch(97% 0.018 60) · accent: oklch(62% 0.13 195)
  * display: Bricolage Grotesque · body: Geist · axes: light / geometric-sans / chromatic-teal
  * studied: no · context: explicit · design-system: design.md · designed-as-app
  * pre-emit critique: P5 H4 E4 S4 R5 V4
@@ -23,7 +23,7 @@ export default function HomePage() {
 
       <main className="mx-auto max-w-[50ch] px-6 pb-24 pt-16 sm:pt-24">
         <h1 className="font-display text-display font-medium leading-[1.15] tracking-tight text-balance [overflow-wrap:anywhere] min-w-0">
-          Hi — if you work from home, this note&apos;s for you.
+          Hi. If you work from home, this note&apos;s for you.
         </h1>
 
         <div className="mt-8 space-y-5 text-lg leading-relaxed text-ink-2">
@@ -31,14 +31,14 @@ export default function HomePage() {
             Your family can&apos;t see the red dot on Slack. So you get walked
             in on mid-call, or you&apos;re &ldquo;still working&rdquo; at 9pm
             because nothing marked the actual end of the day. There&apos;s no
-            commute anymore either — no ten minutes in the car where
+            commute anymore either, no ten minutes in the car where
             &ldquo;work&rdquo; visibly ends and &ldquo;home&rdquo; visibly
             starts.
           </p>
           <p>
             I built OffClock to fix that with one link. It shows your
             household your hours, whether you&apos;re free or in a meeting,
-            and when you&apos;re actually done — no login, no app, works on
+            and when you&apos;re actually done. No login, no app, works on
             the oldest tablet in the house.
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function HomePage() {
         <div className="mt-14 space-y-1 text-lg leading-relaxed text-ink-2">
           <p>
             Still building. Status, hours, shutdown ritual, recurring
-            schedule — all live now.
+            schedule, all live now.
           </p>
           <p>— Kartikay</p>
         </div>
