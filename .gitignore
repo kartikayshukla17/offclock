@@ -36,8 +36,12 @@ yarn-error.log*
 # vercel
 .vercel
 
-# claude code local tooling (worktrees, personal skills) — not project source
+# AI agent local tooling (worktrees, personal skills) — not project source
 /.claude
+/.cursor
+/.agents
+/agent
+/skills-lock.json
 
 # typescript
 *.tsbuildinfo
